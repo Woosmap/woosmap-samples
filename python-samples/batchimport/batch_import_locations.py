@@ -3,23 +3,11 @@ from _csv import QUOTE_ALL
 from csv import Dialect
 import requests
 
-endpoint_csv = 'bar_and_pub_in_paris.csv'
-private_key = '' #your woosmap_api_private_key here
+endpoint_csv = 'france_museum_geocoded.csv'
+private_key = '' #your private key here
 endpoint_api = 'http://api.woosmap.com/stores'
 stores_batch_size = 100
 update_location = False
-
-
-class osm_dialect(Dialect):
-    delimiter = ','
-    quotechar = '"'
-    doublequote = True
-    skipinitialspace = False
-    lineterminator = '\n'
-    quoting = QUOTE_ALL
-
-
-csv.register_dialect('osm', osm_dialect)
 
 
 class InvalidGeometry(Exception):
@@ -28,22 +16,52 @@ class InvalidGeometry(Exception):
 
 def get_geometry(store):
     return {
-        'lat': store['Latitude'],
-        'lng': store['Longitude']
+        'lat': store['latitude'],
+        'lng': store['longitude']
     }
 
 
-def osm2woosmap(store):
-    geometry = get_geometry(store)
+def get_contact(store):
     return {
-        'storeId': store['osmid'],
-        'name': store['name'],
-        'location': geometry,
+        'website': store['SITWEB']
     }
+
+
+def get_address(store):
+    return {
+        'lines': [store['ADR']],
+        'city': store['VILLE'],
+        'zipcode': store['CP'],
+    }
+
+
+def datagov2woosmap(store, id):
+    geometry = get_geometry(store)
+    address = get_address(store)
+    contact = get_contact(store)
+    return {
+        'storeId': id,
+        'name': store['NOM DU MUSEE'],
+        'address': address,
+        'contact': contact,
+        'location': geometry
+    }
+
+
+class data_gov_dialect(Dialect):
+    delimiter = ','
+    quotechar = '"'
+    doublequote = True
+    skipinitialspace = False
+    lineterminator = '\n'
+    quoting = QUOTE_ALL
+
+
+csv.register_dialect('dg', data_gov_dialect)
 
 
 def import_batch(batch, use_put=False):
-    print('--> Importing batch (%d)' % len(batch))
+    print('--> Importing batch (%d) locations' % len(batch))
     if use_put:
         response = session.put(endpoint_api,
                                params={'private_key': private_key},
@@ -64,7 +82,7 @@ def import_batch(batch, use_put=False):
 
 if __name__ == '__main__':
     with open(endpoint_csv, 'r') as f:
-        reader = csv.DictReader(f, dialect="osm")
+        reader = csv.DictReader(f, dialect="dg")
 
         data = []
         for row in reader:
@@ -85,7 +103,7 @@ if __name__ == '__main__':
         for location in data:
             id += 1
             try:
-                woosmap_location = osm2woosmap(location)
+                woosmap_location = datagov2woosmap(location, "ID" + str(id))
 
                 if len(batch) == batch_size:
                     batch_result = import_batch(batch, use_put=update_location)
