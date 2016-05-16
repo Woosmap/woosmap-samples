@@ -4,7 +4,7 @@ from csv import Dialect
 import requests
 
 endpoint_csv = 'france_museum_geocoded.csv'
-private_key = '' #your private key here
+private_key = '646f50a1-99be-4891-9ac2-3a1531be8984' #your private key here
 endpoint_api = 'http://api.woosmap.com/stores'
 stores_batch_size = 100
 update_location = False
@@ -84,10 +84,6 @@ if __name__ == '__main__':
     with open(endpoint_csv, 'r') as f:
         reader = csv.DictReader(f, dialect="dg")
 
-        data = []
-        for row in reader:
-            data.append(row)
-
         failed = []
         session = requests.Session()
         if not update_location:
@@ -100,7 +96,7 @@ if __name__ == '__main__':
         batch = []
         batch_size = stores_batch_size
         id = 0
-        for location in data:
+        for location in reader:
             id += 1
             try:
                 woosmap_location = datagov2woosmap(location, "ID" + str(id))
