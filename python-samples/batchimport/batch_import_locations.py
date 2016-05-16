@@ -4,7 +4,7 @@ from csv import Dialect
 import requests
 
 endpoint_csv = 'france_museum_geocoded.csv'
-private_key = '646f50a1-99be-4891-9ac2-3a1531be8984' #your private key here
+private_key = '' #your private key here
 endpoint_api = 'http://api.woosmap.com/stores'
 stores_batch_size = 100
 update_location = False
