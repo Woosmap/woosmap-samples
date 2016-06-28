@@ -13,13 +13,10 @@ var markersStyle = {
     }
 };
 var tilesStyle = {
-    color: 'rgba(0, 0, 0, 1)',
+    color: '#aa4d55',
     size: 11,
     minSize: 6,
     typeRules: [{
-        type: 'auchan',
-        color: '#aa4d55'
-    }, {
         type: 'drive',
         color: '#82a859'
     }]
