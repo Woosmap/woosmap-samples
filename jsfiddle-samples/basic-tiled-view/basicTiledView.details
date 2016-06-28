@@ -1,0 +1,10 @@
+---
+name: BasicTiledView - Woosmap Javascript API TiledView Demo
+description: jsFiddle demo that display a TiledView of a sample datasource using Woosmap Javascript API.
+authors:
+  - Woosmap DevTeam
+resources:
+  - /basicTiledView.js
+  - /basicTiledView.css
+  - /basicTiledView.html
+...

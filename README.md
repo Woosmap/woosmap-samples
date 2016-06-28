@@ -1,1 +1,1 @@
-Usefull samples to work with woosmap APIs
+Useful samples to work with woosmap APIs
