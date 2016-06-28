@@ -12,7 +12,18 @@ var markersStyle = {
         selectedIcon: {url: 'https://developers.woosmap.com/img/markers/marker_selected.png'}
     }
 };
-
+var tilesStyle = {
+    color: 'rgba(0, 0, 0, 1)',
+    size: 11,
+    minSize: 6,
+    typeRules: [{
+        type: 'auchan',
+        color: '#aa4d55'
+    }, {
+        type: 'drive',
+        color: '#82a859'
+    }]
+};
 
 /*----- Handle store selection -----*/
 function registerLocationClickEvent(mapView) {
@@ -56,7 +67,7 @@ function woosmap_main() {
             center: {lat: 46, lng: 3},
             zoom: 5
         });
-        var mapView = new woosmap.TiledView(map, {style: markersStyle});
+        var mapView = new woosmap.TiledView(map, {style: markersStyle, tileStyle: tilesStyle});
         registerNearbyClickEvent(mapView, dataSource);
         registerLocationClickEvent(mapView);
         registerDraggableMarker(mapView);
