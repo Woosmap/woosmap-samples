@@ -13,7 +13,7 @@ var markersStyle = {
     }
 };
 var tilesStyle = {
-    color: '#aa4d55',
+    color: '#383838',
     size: 11,
     minSize: 6,
     typeRules: [{
