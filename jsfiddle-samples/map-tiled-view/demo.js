@@ -1,15 +1,18 @@
 var projectKey = '12345678';
-var markerStyle = [
-    {
-        type: "default",
-        default: 'https://developers.woosmap.com/img/markers/',
-        selected: 'https://developers.woosmap.com/img/markers/markerSelected.png'
-    },
-    {
-        type: "drive",
-        default: 'https://developers.woosmap.com/img/markers/drive.png'
+var markersStyle = {
+    rules: [
+        {
+            type: 'drive',
+            icon: {url: 'https://developers.woosmap.com/img/markers/drive.png'},
+            selectedIcon: {url: 'https://developers.woosmap.com/img/markers/markerSelected.png'}
+        }
+    ],
+    default: {
+        icon: {url: 'https://developers.woosmap.com/img/markers/marker.png'},
+        selectedIcon: {url: 'https://developers.woosmap.com/img/markers/marker.png'}
     }
-];
+};
+
 
 /*----- Handle store selection -----*/
 function registerLocationClickEvent(mapView) {
@@ -47,7 +50,7 @@ function woosmap_main() {
             center: {lat: 46, lng: 3},
             zoom: 5
         });
-        var mapView = new woosmap.TiledView(map, markerStyle);
+        var mapView = new woosmap.TiledView(map, {style: markersStyle});
         registerNearbyClickEvent(mapView, dataSource);
         registerLocationClickEvent(mapView)
     });
