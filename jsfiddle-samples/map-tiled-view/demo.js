@@ -3,13 +3,13 @@ var markersStyle = {
     rules: [
         {
             type: 'drive',
-            icon: {url: '../../img/markers/drive.png'},
-            selectedIcon: {url: '../../img/markers/markerSelected.png'}
+            icon: {url: 'https://developers.woosmap.com/img/markers/drive.png'},
+            selectedIcon: {url: 'https://developers.woosmap.com/img/markers/markerSelected.png'}
         }
     ],
     default: {
-        icon: {url: '../../img/markers/marker.png'},
-        selectedIcon: {url: '../../img/markers/marker.png'}
+        icon: {url: 'https://developers.woosmap.com/img/markers/marker.png'},
+        selectedIcon: {url: 'https://developers.woosmap.com/img/markers/marker.png'}
     }
 };
 
@@ -44,7 +44,7 @@ function registerNearbyClickEvent(mapView, dataSource) {
 function registerDraggableMarker(mapView) {
     mapView.marker.setOptions({
         draggable: true,
-        icon: {url: '../../img/markers/geolocated.png'}
+        icon: {url: 'https://developers.woosmap.com/img/markers/geolocated.png'}
     });
 }
 /*----- Init and display a Map with a TiledLayer-----*/
