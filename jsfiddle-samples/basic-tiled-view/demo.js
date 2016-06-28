@@ -10,7 +10,6 @@ function woosmap_main() {
 
     }
  
-if (window.attachEvent)
-    window.attachEvent('onload', function () {WoosmapLoader.load('1.2', key, woosmap_main)});
-else
-    window.addEventListener('load', WoosmapLoader.load('1.2', key, woosmap_main), false);
+document.addEventListener("DOMContentLoaded", function(event) {
+   WoosmapLoader.load('1.2', key, woosmap_main);
+});
