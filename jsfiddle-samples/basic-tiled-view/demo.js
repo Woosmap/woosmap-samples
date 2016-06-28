@@ -5,8 +5,8 @@ function woosmap_main() {
         var dataSource = new woosmap.DataSource();
         loader.load(function () {
             var map = new google.maps.Map(woosmap.$('#my-map')[0], {
-                center: {lat: 42, lng: 3},
-                zoom: 7
+                center: {lat: 46, lng: 3},
+                zoom: 5
             });
             var storeLayer = new woosmap.TiledView(map);
         });
