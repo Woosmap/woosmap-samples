@@ -2,20 +2,22 @@
 <script id="search_template" type="text/mustache">
     <div>
         <input class="search_input" placeholder="Search in checked fields"/>
-        <span class="search_clear">✕</span>
+        <span class="search_clear"></span>
     </div>
+
 
 </script>
 <script id="store-row-template" type="text/mustache">
     <div id="item" class="item">
         <a class="title">
-            {{"{{ name "}}}} ({{"{{ store_id "}}}})<br>
-            <small class="quiet">{{"{{ address.city}}</small>
+            {{ name }} ({{ store_id }})<br>
+            <small class="quiet">{{ address.city}}</small>
         </a>
         <div>
-            {{"{{ address.lines "}}}} {{"{{ address.city "}}}} {{"{{ address.zip "}}}}
+            {{ address.lines }} {{ address.city }} {{ address.zip }}
         </div>
     </div>
+
 
 </script>
 <script id="types-selector-template" type="text/mustache">
@@ -28,6 +30,7 @@
         </div>
     <div>
 
+
 </script>
 <script id="tags-selector-template" type="text/mustache">
     <div class="attribute-filter-container">
@@ -38,15 +41,14 @@
         </div>
     <div>
 
+
 </script>
 <script id="text-search-options-template" type="text/mustache">
-    <div style="background:white;margin:0 20px 1px 5px" class="pure-u-1">
-        <input type="checkbox" value="name" class="woosmap-text-search-param checkbox-input-attribute" checked>Name
-        <input type="checkbox" value="city" class="woosmap-text-search-param checkbox-input-attribute" checked>City
-        <input type="checkbox" value="idstore" class="woosmap-text-search-param checkbox-input-attribute">IDStore
-        <img id="text-search-helper" src='../../img/help-icon.png' class="help-icon" title="Apply a filter with the text typed in input on store's checked fields"></img>
+    <div  class="attribute-filter-container">
+        <div><input type="checkbox" value="name" class="woosmap-text-search-param checkbox-input-attribute" checked>Name</div>
+        <div><input type="checkbox" value="city" class="woosmap-text-search-param checkbox-input-attribute" checked>City</div>
+        <div><input type="checkbox" value="idstore" class="woosmap-text-search-param checkbox-input-attribute">IDStore</div>
     </div>
-
 </script>
 
 <div class="locator-container pure-g">

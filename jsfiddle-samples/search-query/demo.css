@@ -1,5 +1,5 @@
 #my-map {
-    height: 500px;
+    height: 600px;
 }
 
 .locator-container {
@@ -10,14 +10,14 @@
 }
 
 .sidebar {
-    height: 500px;
+    height: 600px;
     overflow: hidden;
     border: 1px solid #EEE;
     border-right: none;
 }
 
 .listings {
-    height: 460px;
+
     padding-bottom: 36px;
     background-color: #FFF;
     color: #555;
@@ -168,7 +168,7 @@ small {
 }
 
 .search-attributes-listings {
-    height: 64%;
+    height: 320px;
     padding-bottom: 36px;
 }
 

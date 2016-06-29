@@ -62,11 +62,11 @@ function woosmap_main() {
         var listings = woosmap.$('#listings');
         listings.append(tableview.getContainer());
         var searchTextOptionsRenderer = new woosmap.TemplateRenderer(woosmap.$("#text-search-options-template").html());
-        woosmap.$('.locator-container').prepend(searchTextOptionsRenderer.render());
         var tagsRenderer = new woosmap.TemplateRenderer(woosmap.$("#tags-selector-template").html());
         var typesRenderer = new woosmap.TemplateRenderer(woosmap.$("#types-selector-template").html());
         var attributeSearchContainer = woosmap.$('<div class="attributes-search-container">');
         attributeSearchContainer.append(searchview.getContainer());
+        attributeSearchContainer.append(searchTextOptionsRenderer.render());
         attributeSearchContainer.append(tagsRenderer.render());
         attributeSearchContainer.append(typesRenderer.render());
         var sidebar = woosmap.$('.sidebar');
@@ -104,8 +104,7 @@ function woosmap_main() {
                 mapView.set('stores', defaultStores);
             }
         };
-
-        //initialize the map
+         //initialize the map
         dataSource.getAllStores(function (stores) {
             defaultStores = stores.features;
             mapView.set('stores', stores.features);
