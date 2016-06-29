@@ -1,0 +1,6 @@
+---
+name: MapInfowindow - Woosmap Javascript API MapInfowindow Demo
+description: jsFiddle demo that display a TiledView of a sample datasource using Woosmap Javascript API and allow to click location to open InfoWindow.
+authors:
+  - Woosmap DevTeam
+...
