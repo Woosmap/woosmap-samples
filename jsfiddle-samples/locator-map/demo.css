@@ -4,6 +4,7 @@
 
 .locator-container {
     font-size: 15px;
+    line-height: 1.5em;
 }
 
 .sidebar {
@@ -56,6 +57,13 @@
 
 .item .title small {
     font-weight: 300;
+}
+
+.quiet {
+    color: #888;
+}
+small {
+    font-size: 80%;
 }
 
 .selected_card .item .title,
