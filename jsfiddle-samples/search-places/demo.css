@@ -17,9 +17,10 @@
 }
 
 .listings {
-    height: 100%;
+    height: 460px;
     padding-bottom: 36px;
     background-color: #FFF;
+    color:#555;
 }
 
 .woosmap-tableview-container, .card_container {
