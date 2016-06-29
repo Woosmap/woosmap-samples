@@ -115,7 +115,9 @@ small {
 .search_clear:hover {
     background: white url('https://developers.woosmap.com/img/close-hover.png') no-repeat left top;
 }
-
+ .woosmap-tableview-highlighted-cell{
+     background-color: #f8f8f8;
+ }
 ::-webkit-scrollbar {
     width: 5px;
     height: 5px;
