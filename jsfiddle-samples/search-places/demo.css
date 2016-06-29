@@ -6,6 +6,7 @@
     font-size: 15px;
     line-height: 1.5em;
     color: #555;
+    background: #FFF;
 }
 
 .sidebar {
@@ -48,6 +49,7 @@
 .quiet {
     color: #888;
 }
+
 small {
     font-size: 80%;
 }
@@ -68,7 +70,6 @@ small {
 .selected_card:hover {
     background-color: #f8f8f8;
 }
-
 
 .search_container {
     margin: 5px;
@@ -91,9 +92,11 @@ small {
     width: 100%;
     z-index: 6;
     outline: none;
-    background: url(data:image/gif;base64,R0lGODlhAQABAID/AMDAwAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw%3D%3D) transparent;
+    background: #FFF;
     margin-top: 7px;
     float: left;
+    font-size: 1em;
+    color: #555;
 }
 
 .search_clear {
