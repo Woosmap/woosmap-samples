@@ -1,6 +1,5 @@
 #my-map {
-    height: 400px;
-    width: 100%;
+    height: 500px;
 }
 
 .locator-container {
@@ -33,6 +32,7 @@
 .listings {
     height: 100%;
     padding-bottom: 36px;
+    background-color: #FFF;
 }
 
 .woosmap-tableview-container, .card_container {
@@ -98,7 +98,8 @@
     vertical-align: top;
     text-rendering: auto;
 }
-.pure-u-1{
+
+.pure-u-1 {
     width: 100%;
 }
 
