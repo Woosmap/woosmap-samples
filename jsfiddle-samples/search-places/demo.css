@@ -104,8 +104,8 @@ small {
     background: white url('https://developers.woosmap.com/img/close.png') no-repeat left top;
     position: absolute;
     right: 5px;
-    top: 5px;
-    padding: 5px;
+    top: 8px;
+    padding: 7px;
     font-size: 14px;
     cursor: pointer;
     display: none;
