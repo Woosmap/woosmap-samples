@@ -112,7 +112,7 @@ small {
 }
 
 .search_clear:hover {
-    background: white url('https://developers.woosmap.com/img/close.png') no-repeat left top;
+    background: white url('https://developers.woosmap.com/img/close-hover.png') no-repeat left top;
 }
 
 ::-webkit-scrollbar {
