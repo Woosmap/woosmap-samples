@@ -9,13 +9,14 @@
     overflow: hidden;
     white-space: nowrap;
     text-decoration: none;
+    color: #555;
 }
 
 .info-item .title {
     display: block;
     color: #4d9da9;
     font-weight: 500;
-    background: url('/img/Punaise_WGS_V3.png') no-repeat top left;
+    background: url('https://developers.woosmap.com/img/Punaise_WGS_V3.png') no-repeat top left;
     background-size: auto 58px;
     padding-left: 70px;
 }
