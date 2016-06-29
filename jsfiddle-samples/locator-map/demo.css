@@ -1,0 +1,113 @@
+#my-map {
+    height: 400px;
+    width: 100%;
+}
+
+.locator-container {
+    margin: 30px 0;
+    font-size: 15px;
+}
+
+.sidebar {
+    height: 500px;
+    overflow: hidden;
+    border: 1px solid #EEE;
+    border-right: none;
+}
+
+.locator-heading {
+    background: #fff;
+    border-bottom: 1px solid #eee;
+    height: 36px;
+    line-height: 36px;
+    padding: 0 10px;
+}
+
+.locator-heading h2 {
+    font-size: 20px;
+    margin: 0;
+    font-weight: 400;
+    color: #333;
+}
+
+.listings {
+    height: 100%;
+    padding-bottom: 36px;
+}
+
+.woosmap-tableview-container, .card_container {
+    max-height: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.item {
+    display: block;
+    border-bottom: 1px solid #eee;
+    padding: 10px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.item .title {
+    display: block;
+    color: #4d9da9;
+    font-weight: 500;
+}
+
+.item .title small {
+    font-weight: 300;
+}
+
+.selected_card .item .title,
+.item .title:hover {
+    color: #1badee;
+}
+
+.item.active {
+    background-color: #f8f8f8;
+}
+
+.selected_card {
+    background-color: #f8f8f8;
+}
+
+.selected_card:hover {
+    background-color: #f8f8f8;
+}
+
+/*grids*/
+.pure-g {
+    letter-spacing: -.31em;
+    text-rendering: optimizespeed;
+    font-family: FreeSans, Arimo, "Droid Sans", Helvetica, Arial, sans-serif;
+    display: -webkit-flex;
+    -webkit-flex-flow: row wrap;
+    display: -ms-flexbox;
+    -ms-flex-flow: row wrap;
+    -ms-align-content: flex-start;
+    -webkit-align-content: flex-start;
+    align-content: flex-start;
+}
+
+.pure-u-1, .u-sm-1-3, .u-sm-2-3 {
+    display: inline-block;
+    zoom: 1;
+    letter-spacing: normal;
+    word-spacing: normal;
+    vertical-align: top;
+    text-rendering: auto;
+}
+.pure-u-1{
+    width: 100%;
+}
+
+@media screen and (min-width: 35.5em) {
+    .u-sm-1-3 {
+        width: 33.3333%;
+    }
+
+    .u-sm-2-3 {
+        width: 66.6667%;
+    }
+}
