@@ -22,12 +22,6 @@ var tilesStyle = {
     }]
 };
 
-function registerDraggableMarker(mapView) {
-    mapView.marker.setOptions({
-        draggable: true,
-        icon: {url: 'https://developers.woosmap.com/img/markers/geolocated.png'}
-    });
-}
 
 /*----- Init and display a Map with a TiledLayer-----*/
 function woosmap_main() {
