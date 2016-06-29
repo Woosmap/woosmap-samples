@@ -133,6 +133,54 @@ small {
     background-color: #F7F7F7;
 }
 
+/* attribute search page */
+
+.attributes-search-container {
+    border-bottom: solid 1px #eee;
+
+}
+
+.attribute-filter-container {
+    margin: 5px;
+    border: 1px solid rgba(27, 173, 238, 0.29);
+}
+
+.attribute-filter-container:hover {
+    margin: 5px;
+    border: 1px solid #1badee;
+}
+
+.attribute-filter-title {
+    cursor: pointer;
+    text-align: center;
+}
+
+.attribute-filter-title.active {
+    border-bottom: solid 1px #eee;
+}
+
+.attribute-filter-body {
+    margin-left: 5px;
+}
+
+.checkbox-input-attribute {
+    margin-right: 5px;
+}
+
+.search-attributes-listings {
+    height: 64%;
+    padding-bottom: 36px;
+}
+
+.woosmap-tableview-highlighted-cell .title {
+    color: #1badee;
+}
+
+.woosmap-tableview-selected-cell {
+    color: #1badee;
+    background-color: rgba(235, 235, 235, 0.29);
+}
+
 /*grids*/
 .pure-g {
     letter-spacing: -.31em;
