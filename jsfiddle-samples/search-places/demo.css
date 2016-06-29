@@ -104,7 +104,7 @@ small {
     color: #888;
     position: absolute;
     right: 5px;
-    top: 7px;
+    top: 5px;
     font-size: 14px;
     cursor: pointer;
     display: none;
@@ -112,6 +112,19 @@ small {
 
 .search_clear:hover {
     color: #c82400;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #d1d1d1;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #F7F7F7;
 }
 
 /*grids*/

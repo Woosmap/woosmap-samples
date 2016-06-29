@@ -22,6 +22,12 @@ var tilesStyle = {
     }]
 };
 
+function registerDraggableMarker(mapView) {
+    mapView.marker.setOptions({
+        draggable: true,
+        icon: {url: 'https://developers.woosmap.com/img/markers/geolocated.png'}
+    });
+}
 
 /*----- Init and display a Map with a TiledLayer-----*/
 function woosmap_main() {
@@ -85,26 +91,7 @@ function woosmap_main() {
             }
         };
 
-        /*var tableview = new woosmap.ui.TableView({
-         cell: '<div id="item" class="item"><a class="title">' +
-         '{{name}}<br><small class="quiet">{{address.city}}</small></a>' +
-         '<div>{{address.lines}} {{address.city}} {{address.zip}}</div></div>'
-         });
-
-         var listings = woosmap.$('#listings');
-         listings.append(tableview.getContainer());
-         self.tableview = tableview;
-         var map = new google.maps.Map(woosmap.$('#my-map')[0], {
-         center: {lat: 46, lng: 3},
-         zoom: 5
-         });
-         var mapView = new woosmap.TiledView(map, {style: markersStyle, tileStyle: tilesStyle});
-         mapView.bindTo('stores', tableview, 'stores', false);
-         mapView.bindTo('selectedStore', tableview, 'selectedStore', false);
-
-         dataSource.getAllStores(function (stores) {
-         tableview.set('stores', stores.features);
-         });*/
+        registerDraggableMarker(mapView);
     });
 
 }
