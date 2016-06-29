@@ -43,7 +43,7 @@ function woosmap_main() {
 
         var mapView = new woosmap.TiledView(map, {style: markersStyle, tileStyle: tilesStyle});
 
-        var mapView = new woosmap.ui.TableView({
+        var tableview = new woosmap.ui.TableView({
             cell_store: woosmap.$("#store-row-template").html()
         });
         mapView.bindTo('stores', tableview);
