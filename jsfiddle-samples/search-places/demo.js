@@ -1,5 +1,4 @@
 var projectKey = '12345678';
-var googleClientId = 'gme-webgeoservicessa1';
 var markersStyle = {
     rules: [
         {
@@ -27,7 +26,7 @@ var tilesStyle = {
 /*----- Init and display a Map with a TiledLayer-----*/
 function woosmap_main() {
     var self = this;
-    var loader = new woosmap.MapsLoader(googleClientId, ['places']);
+    var loader = new woosmap.MapsLoader("", ['places']);
     var dataSource = new woosmap.DataSource();
     loader.load(function () {
 
