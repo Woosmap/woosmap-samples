@@ -556,3 +556,16 @@ input:not(:valid) + .woosmap-close-icon {
         margin-bottom: 0
     }
 }
+
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #d1d1d1;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #F7F7F7;
+}
