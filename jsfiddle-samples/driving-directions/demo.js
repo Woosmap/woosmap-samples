@@ -1,15 +1,21 @@
 var projectKey = '12345678';
 var markersStyle = {
-    rules: [
-        {
-            type: 'drive',
-            icon: {url: 'https://developers.woosmap.com/img/markers/marker_drive.png'},
-            selectedIcon: {url: 'https://developers.woosmap.com/img/markers/marker_selected.png'}
+    rules: [{
+        type: 'drive',
+        icon: {
+            url: 'https://developers.woosmap.com/img/markers/marker_drive.png'
+        },
+        selectedIcon: {
+            url: 'https://developers.woosmap.com/img/markers/marker_selected.png'
         }
-    ],
+    }],
     default: {
-        icon: {url: 'https://developers.woosmap.com/img/markers/marker_default.png'},
-        selectedIcon: {url: 'https://developers.woosmap.com/img/markers/marker_selected.png'}
+        icon: {
+            url: 'https://developers.woosmap.com/img/markers/marker_default.png'
+        },
+        selectedIcon: {
+            url: 'https://developers.woosmap.com/img/markers/marker_selected.png'
+        }
     }
 };
 var tilesStyle = {
@@ -63,17 +69,19 @@ function woosmap_main() {
         /*********************************/
 
         var map = new google.maps.Map(woosmap.$('#my-map')[0], {
-            center: {lat: 44, lng: 4},
-            zoom: 7,
+            center: {
+                lat: 45,
+                lng: 2
+            },
+            zoom: 5,
             disableDefaultUI: true
         });
 
-        var mapView = new woosmap.TiledView(map, {style: markersStyle, tileStyle: tilesStyle});
-
-        dataSource.getAllStores(function (geojson) {
-            woosmap.$("#inputs").show();
-            mapView.set('stores', geojson.features);
+        var mapView = new woosmap.TiledView(map, {
+            style: markersStyle,
+            tileStyle: tilesStyle
         });
+
 
         /**** directions renderers options ****/
         var newPolylineOption = {
@@ -103,11 +111,13 @@ function woosmap_main() {
         var directionsMarkers = [];
         var navigatorGeolocation = new woosmap.location.LocationProvider();
         var travelModeSelector = new woosmap.ui.TravelModeSelector(woosmap.$('#travel-mode-selector-template').html());
-        var originDestinationInput = new woosmap.ui.OriginDestinationInput(woosmap.$('#directions-origin-destination-template').html(), {'geolocText': 'Ma Position'});
+        var originDestinationInput = new woosmap.ui.OriginDestinationInput(woosmap.$('#directions-origin-destination-template').html(), {
+            'geolocText': 'Ma Position'
+        });
         var directionsProvider = new woosmap.location.DirectionsProvider(directionRendererOptions, googleDirectionsRequestOptions);
         var mailView = new woosmap.ui.MailView(woosmap.$('#directions-mail-input-template').html());
         var locationProvider = new woosmap.location.LocationProvider();
-        var store_id = location.search.split('store_id=')[1] ? location.search.split('store_id=')[1] : '';
+        var store_id = '';
         var directionsRestorer = new woosmap.utils.MVCObject();
         directionsRestorer.location = null;
         directionsRestorer.location_changed = function () {
@@ -190,8 +200,7 @@ function woosmap_main() {
             },
             mailError: function () {
                 _update_mail_status('Erreur', 'red');
-            }
-            ,
+            },
             mailSending: function () {
                 _update_mail_status('Envoi en cours', '#1badee');
             }
@@ -230,12 +239,22 @@ function woosmap_main() {
         });
 
         google.maps.event.addListener(map, 'click', function (event) {
-            originDestinationInput.set('location', {'lat': event.latLng.lat(), 'lng': event.latLng.lng()});
+            originDestinationInput.set('location', {
+                'lat': event.latLng.lat(),
+                'lng': event.latLng.lng()
+            });
         });
-
-        if (store_id) {
-            locationProvider.askForLocation(navigator.geolocation);
-        }
+        window.setTimeout(function () {
+            store_id = top.location.search.split('store_id=')[1] ? top.location.search.split('store_id=')[1].replace('&', '') : '';
+            if (store_id) {
+                dataSource.getStoreById(store_id, function (data) {
+                    originDestinationInput.set('selectedStore', data);
+                    originDestinationInput.set('location', self.get('location'));
+                });
+                locationProvider.askForLocation(navigator.geolocation);
+            }
+        }, 1000);
+        woosmap.$("#inputs").show();
     });
 }
 
