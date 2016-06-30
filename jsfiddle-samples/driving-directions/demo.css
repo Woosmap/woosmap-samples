@@ -2,6 +2,17 @@
     height: 500px;
 }
 
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+input {
+    font-size: inherit;
+    line-height: normal;
+}
+
 #directions-box {
     position: absolute;
     max-height: 100%;
@@ -465,11 +476,13 @@ input:not(:valid) + .woosmap-close-icon {
 .pure-u-1 {
     width: 100%;
 }
+
 .pure-u-1-3 {
-    width:33.3333%
+    width: 33.3333%;
+    *width: 33.3023%
 }
 
-.pure-form input[type=text], .pure-form input[type=email]{
+.pure-form input[type=text], .pure-form input[type=email] {
     padding: .5em .6em;
     display: inline-block;
     border: 1px solid #ccc;
@@ -502,7 +515,7 @@ input:not(:valid) + .woosmap-close-icon {
     border-color: #129FEA
 }
 
-.pure-form input[type=text][disabled], .pure-form input[type=email][disabled]{
+.pure-form input[type=text][disabled], .pure-form input[type=email][disabled] {
     cursor: not-allowed;
     background-color: #eaeded;
     color: #cad2d3
@@ -525,18 +538,16 @@ input:not(:valid) + .woosmap-close-icon {
     border-color: #e9322d
 }
 
-
 .pure-form label {
     margin: .5em 0 .2em
 }
-
 
 @media only screen and (max-width: 480px) {
     .pure-form button[type=submit] {
         margin: .7em 0 0
     }
 
-    .pure-form input:not([type]), .pure-form input[type=text], .pure-form input[type=email],  .pure-form label {
+    .pure-form input:not([type]), .pure-form input[type=text], .pure-form input[type=email], .pure-form label {
         margin-bottom: .3em;
         display: block
     }
