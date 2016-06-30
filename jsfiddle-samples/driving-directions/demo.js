@@ -79,7 +79,8 @@ function woosmap_main() {
         var newPolylineOption = {
             strokeColor: '#1badee',
             strokeOpacity: 1.0,
-            strokeWeight: 4
+            strokeWeight: 4,
+            icons: ['https://developers.woosmap.com/img/markers/marker.png']
         };
 
         // Start/Finish icons
@@ -240,5 +241,5 @@ function woosmap_main() {
 }
 
 document.addEventListener("DOMContentLoaded", function (event) {
-    WoosmapLoader.load('1.2', projectKey, woosmap_main);
+    WoosmapLoader.load('latest', projectKey, woosmap_main);
 });
