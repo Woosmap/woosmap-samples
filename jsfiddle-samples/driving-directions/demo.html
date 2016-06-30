@@ -1,0 +1,128 @@
+<script src="https://sdk.woosmap.com/locator/loader.js"></script>
+
+<script id="travel-mode-selector-template" type="text/mustache">
+<label class="woosmap-form-label geolocation-button">
+    <span class="woosmap-geolocation-icon"></span>
+</label>
+<div class="woosmap-travel-mode">
+    <div class="pure-g">
+        <label class="pure-u-1-3 woosmap-travel-mode-option driving selected" data-travel-mode="DRIVING">
+            <span class="woosmap-travel-mode-icon woosmap-driving-icon"></span>
+        </label>
+
+        <label class="pure-u-1-3 woosmap-travel-mode-option walking" data-travel-mode="WALKING">
+            <span class="woosmap-travel-mode-icon woosmap-walking-icon"></span>
+        </label>
+
+        <label class="pure-u-1-3 woosmap-travel-mode-option bicycling" data-travel-mode="BICYCLING">
+            <span class="woosmap-travel-mode-icon woosmap-bicycling-icon"></span>
+        </label>
+    </div>
+</div>
+
+</script>
+<script id="directions-summary-template" type="text/mustache">
+<div>
+    <div class="woosmap-route-container">
+        <div class="woosmap-route-info-container">
+            <div class="route-summary-upper-panel">
+                <div style="float:left">{{ summary }}</div>
+                <div class="woosmap-route-traffic-duration" style="float:right">
+                    {{#durationInTrafficShort }}
+                        {{ durationInTrafficShort }}
+                    {{/durationInTrafficShort }}
+                </div>
+                <div style="clear:both"></div>
+            </div>
+            <div class="route-summary-lower-panel">
+                <div class="woosmap-route-duration" style="float:left">{{ durationShort }} sans circulation</div>
+                <div style="float:right">{{ distance }}</div>
+                <div style="clear:both"></div>
+            </div>
+        </div>
+        <div class="woosmap-route-details woosmap-show-steps" data-renderer-index='{{ rendererIndex }}'>
+            Details
+            <div class="pure-form woosmap-mobile-link-container">
+                <input type="button" class="pure-button woosmap-mobile-link-button" value="Start driving" />
+            </div>
+        </div>
+    </div>
+</div>
+
+</script>
+<script id="directions-origin-destination-template" type="text/mustache">
+ <div id="directions-box">
+    <div id="inputs" class="woosmap-directions-inputs">
+        <div id="directions-travel-mode-selector"></div>
+        <form>
+            <div class="woosmap-directions-origin">
+                <label class="woosmap-form-label">
+                    <span class="woosmap-directions-icon woosmap-depart-icon"></span>
+                </label>
+                <input type="text"
+                       required="required"
+                       id="woosmap-directions-origin-input"
+                       class="woosmap-origin"
+                       placeholder="Start"
+                       autocomplete="off">
+
+                <div class="woosmap-directions-icon woosmap-close-icon" title="Clear value"></div>
+            </div>
+
+            <div class="woosmap-directions-destination">
+                <label class="woosmap-form-label">
+                    <span class="woosmap-directions-icon woosmap-arrive-icon"></span>
+                </label>
+                <input type="text"
+                       required="required"
+                       id="woosmap-directions-destination-input"
+                       class="woosmap-destination"
+                       placeholder="End"
+                       autocomplete="off">
+
+                <div class="woosmap-directions-icon woosmap-close-icon" title="Clear value"></div>
+            </div>
+            <span class="woosmap-directions-icon woosmap-reverse-icon woosmap-directions-reverse-input woosmap-toggle-origin-destination"
+                  title="Reverse origin &amp; destination">
+            </span>
+        </form>
+    </div>
+    <div id="directions">
+        <div id="routes" class="woosmap-directions-routes"></div>
+        <div id="instructions" class="woosmap-directions-instructions" style="display:none">
+            <div class="instructions-header">
+                <span class="woosmap-instructions-title">Itinéraire</span>
+                <span id="close-instructions-button" class="close-instructions-button"></span>
+                <div style="clear:both"></div>
+            </div>
+            <div id="instructions-steps"></div>
+        </div>
+        <div id="instructions-mail"></div>
+    </div>
+</div>
+
+</script>
+<script id="directions-mail-input-template" type="text/mustache">
+<div class="woosmap-mail-container">
+    <div class="woosmap-mobile-form-menu">
+        <label class="woosmap-mobile-label"> 
+            <span class="woosmap-mobile-icon" ></span> 
+            Send to mobile
+        </label>
+    </div>
+    <div class="woosmap-mobile-form" style="display: none">
+       <div class="pure-form">
+            <input type="email" class="woosmap-mail-input" placeholder="your@email.com" width="">
+            <button class="pure-button woosmap-send-button">Send</button>
+        </div>
+    </div>
+</div>
+<div id="mail-status"></div>
+
+</script>
+
+<div class="locator-container pure-g">
+    <div id="map-container" class="map pure-u-1">
+        <div id="map" class="map"></div>
+    </div>
+</div>

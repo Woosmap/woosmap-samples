@@ -1,0 +1,467 @@
+#my-map {
+    height: 500px;
+}
+
+#directions-box {
+    position: absolute;
+    max-height: 100%;
+    top: 10px;
+    left: 10px;
+    max-width: 350px;
+    min-width: 250px;
+    width: 40%;
+}
+
+#inputs,
+#errors,
+#directions {
+    width: 100%
+}
+
+#inputs {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    display: none;
+    background-color: white;
+}
+
+#directions {
+    display: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    background-color: white;
+    margin-top: 4px;
+    max-height: 470px;
+}
+
+#directions-travel-mode-selector {
+    position: relative;
+    height: 40px;
+}
+
+#directions-travel-mode-selector .woosmap-form-label {
+    background-color: #F7F7F7;
+}
+
+#errors {
+    z-index: 8;
+    opacity: 0;
+    padding: 10px;
+    border-radius: 0 0 3px 3px;
+    background: rgba(0, 0, 0, .25);
+    top: 90px;
+    left: 10px;
+}
+
+/* Basics */
+
+.woosmap-directions-inputs,
+.woosmap-directions-errors,
+.woosmap-directions-routes,
+.woosmap-directions-instructions {
+    font: 300 15px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
+/* Inputs */
+
+.woosmap-directions-origin,
+.woosmap-directions-destination {
+    /*background-color: white;*/
+    position: relative;
+}
+
+.woosmap-form-label {
+    cursor: pointer;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: #444;
+    color: rgba(0, 0, 0, .75);
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    line-height: 20px;
+}
+
+.woosmap-directions-origin .woosmap-form-label {
+    background-color: #1badee;
+}
+
+.woosmap-travel-mode-option {
+    cursor: pointer;
+    top: 0;
+    color: rgba(0, 0, 0, .75);
+    text-align: center;
+    padding: 10px;
+    line-height: 20px;
+}
+
+.woosmap-directions-inputs input {
+    width: 100%;
+    border: 0;
+    background-color: transparent;
+    height: 40px;
+    margin: 0;
+    color: rgba(0, 0, 0, .5);
+    padding: 10px 10px 10px 50px;
+    font-weight: 300;
+}
+
+.woosmap-directions-inputs input:focus {
+    color: rgba(0, 0, 0, .75);
+    outline: 0;
+    box-shadow: none;
+    outline: thin dotted\8;
+}
+
+.woosmap-directions-origin input {
+    border-top: 1px solid rgba(0, 0, 0, .1);
+}
+
+.woosmap-directions-destination input {
+    border-top: 1px solid rgba(0, 0, 0, .1);
+}
+
+.woosmap-directions-reverse-input {
+    position: absolute;
+    background: white;
+    left: 50px;
+    top: 70px;
+    cursor: pointer;
+}
+
+.woosmap-directions-inputs .woosmap-close-icon {
+    opacity: .5;
+    position: absolute;
+    right: 5px;
+    top: 10px;
+    cursor: pointer;
+}
+
+input:not(:valid) + .woosmap-close-icon {
+    display: none;
+}
+
+.woosmap-close-icon:hover {
+    opacity: .75;
+}
+
+/* Errors */
+
+.woosmap-directions-error {
+    color: white;
+    display: inline-block;
+    padding: 0 5px;
+}
+
+/* Routes */
+
+.woosmap-route-container {
+    padding: 6px;
+    box-shadow: -1px 5px 10px -4px #aaa6a0;
+}
+
+.woosmap-route-info-container {
+    border-bottom: 1px solid rgb(230, 230, 230);
+}
+
+.woosmap-route-info-container.hide {
+    border-bottom: none;
+}
+
+.woosmap-route-short-duration {
+    color: rgb(152, 152, 152);
+    font-size: small
+}
+
+.woosmap-route-traffic-duration {
+    color: #1badee;
+}
+
+.woosmap-route-details {
+    font-size: small;
+    color: #3b8bba;
+    margin-bottom: 10px;
+}
+
+.woosmap-route-details:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.route-summary-upper-panel.hide {
+    cursor: pointer;
+}
+
+/* Mail View */
+
+.woosmap-mail-container {
+    padding: 6px;
+    box-shadow: -1px 5px 10px -4px #aaa6a0;
+}
+
+.woosmap-mobile-form-menu {
+    cursor: pointer;
+    margin: 2px 0px 3px -3px;
+}
+
+.woosmap-mobile-icon {
+    background-image: url('https://developers.woosmap.com/img/mobile-icon.png');
+    -webkit-background-size: 20px 20px;
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    content: '';
+    display: inline-block;
+    vertical-align: top;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    margin-top: 1px;
+    background-color: white;
+}
+
+.woosmap-mobile-link-container {
+    float: right;
+    margin: 3px;
+}
+
+/* Instructions */
+
+.instructions-header {
+    background-color: #1badee;
+}
+
+#instructions-steps {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    max-height: 445px;
+    padding-left: 5px;
+    padding-right: 5px;
+    font-size: 13px;
+}
+
+.woosmap-instructions-title {
+    vertical-align: middle;
+    padding-left: 10px;
+    color: white;
+}
+
+.close-instructions-button {
+    background-image: url('https://developers.woosmap.com/img/close-x.png');
+    cursor: pointer;
+    background-color: #1badee;
+    width: 24px;
+    height: 24px;
+    float: right;
+}
+
+.woosmap-directions-steps {
+    position: relative;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.woosmap-directions-step {
+    position: relative;
+    color: rgba(255, 255, 255, .75);
+    cursor: pointer;
+    padding: 20px 20px 20px 40px;
+    font-size: 20px;
+    line-height: 25px;
+}
+
+.woosmap-directions-step-distance {
+    color: rgba(255, 255, 255, .5);
+    position: absolute;
+    padding: 5px 10px;
+    font-size: 12px;
+    left: 30px;
+    bottom: -15px;
+}
+
+.woosmap-directions-step:hover {
+    color: white;
+}
+
+.woosmap-directions-step:after {
+    content: "";
+    position: absolute;
+    top: 50px;
+    bottom: -20px;
+    border-left: 2px dotted rgba(255, 255, 255, .2);
+    left: 20px;
+}
+
+.woosmap-directions-step:last-child:after,
+.woosmap-directions-step:last-child .woosmap-directions-step-distance {
+    display: none;
+}
+
+/* icons */
+
+.woosmap-geolocation-icon {
+    background-image: url('https://developers.woosmap.com/img/location.png');
+    -webkit-background-size: 280px 20px;
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    margin: 0;
+    content: '';
+    display: inline-block;
+    vertical-align: top;
+    width: 20px;
+    height: 20px;
+}
+
+.woosmap-travel-mode {
+    padding: 0 0 0 40px;
+    background: white;
+    text-align: center;
+}
+
+.woosmap-directions-icon {
+    background-image: url('https://developers.woosmap.com/img/woosmap.directions.png');
+    -webkit-background-size: 280px 20px;
+    background-size: 280px 20px;
+    background-repeat: no-repeat;
+    margin: 0;
+    content: '';
+    display: inline-block;
+    vertical-align: top;
+    width: 20px;
+    height: 20px;
+}
+
+.woosmap-directions-instructions .woosmap-directions-icon {
+    position: absolute;
+    left: 10px;
+    top: 25px;
+    margin: auto;
+}
+
+.woosmap-depart-icon {
+    background-position: -160px 0;
+}
+
+.woosmap-arrive-icon {
+    background-position: -200px 0;
+}
+
+.woosmap-close-icon {
+    background-position: -220px 0;
+}
+
+.woosmap-reverse-icon {
+    background-position: -240px 0;
+}
+
+.woosmap-travel-mode-option {
+    background-color: white;
+}
+
+.woosmap-travel-mode-icon {
+    background-image: url('https://developers.woosmap.com/img/driving-sprite.png');
+    -webkit-background-size: 20px 276px;
+    background-size: 20px 276px;
+    background-repeat: no-repeat;
+    margin: 0;
+    content: '';
+    display: inline-block;
+    vertical-align: top;
+    width: 20px;
+    height: 20px;
+}
+
+.woosmap-driving-icon {
+    background-position: 0 -40px;
+}
+
+.woosmap-walking-icon {
+    background-position: 0 -120px;
+}
+
+.woosmap-bicycling-icon {
+    background-position: 0 -160px;
+}
+
+.selected .woosmap-driving-icon {
+    background-position: 0 -60px;
+}
+
+.selected .woosmap-walking-icon {
+    background-position: 0 -140px;
+}
+
+.selected .woosmap-bicycling-icon {
+    background-position: 0 -180px;
+}
+
+.woosmap-travel-mode-option.selected {
+    box-shadow: inset 0 -2px 0px 0px #3983de;
+}
+
+/*------------override google maps style----------*/
+.adp-warnbox {
+    display: none;
+}
+
+.adp-placemark {
+    border: none;
+    background: #FFF;
+}
+
+#adp-placemark, .adp-placemark {
+    font-weight: bold !important;
+}
+
+.adp-substep {
+    max-width: 153px;
+}
+
+#directions .adp-placemark img {
+    width: 30px;
+    height: 44px;
+    margin-right: 5px;
+}
+
+#directions #adp-placemark img {
+    content: url('https://developers.woosmap.com/img/markers/start.png') !important;
+}
+
+#directions .adp-placemark:last-child img {
+    content: url('https://developers.woosmap.com/img/markers/end.png') !important;
+}
+
+#map-container {
+    position: relative;
+}
+
+/*grids*/
+.pure-g {
+    letter-spacing: -.31em;
+    text-rendering: optimizespeed;
+    display: -webkit-flex;
+    -webkit-flex-flow: row wrap;
+    display: -ms-flexbox;
+    -ms-flex-flow: row wrap;
+    -ms-align-content: flex-start;
+    -webkit-align-content: flex-start;
+    align-content: flex-start;
+}
+
+.pure-g [class *="pure-u"] {
+    font-family: "Open Sans", "Helvetica Neue", Arial, Helvetica, Verdana, sans-serif;
+    font-weight: normal;
+    letter-spacing: 0.01em;
+}
+
+.pure-u-1 {
+    display: inline-block;
+    zoom: 1;
+    letter-spacing: normal;
+    word-spacing: normal;
+    vertical-align: top;
+    text-rendering: auto;
+}
+
+.pure-u-1 {
+    width: 100%;
+}
