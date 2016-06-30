@@ -107,8 +107,7 @@ function woosmap_main() {
         var directionsProvider = new woosmap.location.DirectionsProvider(directionRendererOptions, googleDirectionsRequestOptions);
         var mailView = new woosmap.ui.MailView(woosmap.$('#directions-mail-input-template').html());
         var locationProvider = new woosmap.location.LocationProvider();
-        var current_url = new Url(window.location.href);
-        var store_id = current_url.getQueryValue('store_id');
+        var store_id = location.search.split('store_id=')[1] ? location.search.split('store_id=')[1] : '';
         var directionsRestorer = new woosmap.utils.MVCObject();
         directionsRestorer.location = null;
         directionsRestorer.location_changed = function () {
