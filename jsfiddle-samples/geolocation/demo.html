@@ -1,0 +1,38 @@
+<script src="https://sdk.woosmap.com/locator/loader.js"></script>
+
+<!----Nearest Store from User Location----->
+<div class="pure-g">
+    <div class="nearest-store-map" id="nearest-store-map"></div>
+    <div class="nearest-store-button-div">
+        <div><button id="ip-geolocation-button" class="nearest-store-button pure-button">IP geolocation</button></div>
+        <div><button id="html5-geolocation-button" class="pure-button">HTML5 geolocation</button></div>
+        <div id="store-info"></div>
+    </div>
+    <div style="clear:both;"></div>
+</div>
+
+<!----Postal Code from User Location----->
+<p>
+<button id="geoloc-zipcode-ip" class="pure-button">
+    <i class="fa fa-location-arrow"></i>
+    IP Postal Code
+</button>
+<button id="geoloc-zipcode-optin" class="pure-button">
+    <i class="fa fa-location-arrow"></i>
+    Opt-IN Postal Code
+</button>
+<code id="geoloc-zipcode-result">...</code>
+</p>
+
+
+<!-----Closest store from User Location--->
+<button class="pure-button" id="update-stores-distance">Get closest store</button>
+<p id="closest-store-info"></p>
+<script id="closest-store-template" type="text/mustache">
+    <ul>
+        <li>Store's name : {{"{{name"}}}}</li>
+        <li>Address : {{"{{address.city"}}}}</li>
+        <li>Distance to store : {{"{{distance"}}}} km</li>
+        <li>Driving time : {{"{{duration"}}}} minutes </li>
+    </ul>
+</script>
