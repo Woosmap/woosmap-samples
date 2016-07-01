@@ -1,0 +1,176 @@
+#my-map {
+    height: 500px;
+}
+
+.locator-container {
+    font-size: 15px;
+    line-height: 1.5em;
+    color: #555;
+    background: #FFF;
+}
+
+.sidebar {
+    height: 500px;
+    overflow: hidden;
+    border: 1px solid #EEE;
+    border-right: none;
+}
+
+.listings {
+    height: 460px;
+    padding-bottom: 36px;
+    background-color: #FFF;
+    color: #555;
+}
+
+.woosmap-tableview-container, .card_container {
+    max-height: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.item {
+    display: block;
+    border-bottom: 1px solid #eee;
+    padding: 10px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.item .title {
+    display: block;
+    color: #4d9da9;
+    font-weight: 500;
+}
+
+.item .title small {
+    font-weight: 300;
+}
+
+.quiet {
+    color: #888;
+}
+
+small {
+    font-size: 80%;
+}
+
+.selected_card .item .title,
+.item .title:hover {
+    color: #1badee;
+}
+
+.item.active {
+    background-color: #f8f8f8;
+}
+
+.selected_card {
+    background-color: #f8f8f8;
+}
+
+.selected_card:hover {
+    background-color: #f8f8f8;
+}
+
+.search_container {
+    margin: 5px;
+    border: 1px solid #1badee;
+    border-radius: 2px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    height: 32px;
+    outline: none;
+    padding: 0 7px;
+    width: 96%;
+    vertical-align: top;
+    position: relative;
+}
+
+.search_input {
+    border: none;
+    padding: 0;
+    height: 1.25em;
+    width: 100%;
+    z-index: 6;
+    outline: none;
+    background: #FFF;
+    margin-top: 7px;
+    float: left;
+    font-size: 1em;
+    color: #555;
+}
+
+.search_clear {
+    float: right;
+    background: white url('https://developers.woosmap.com/img/close.png') no-repeat left top;
+    position: absolute;
+    right: 5px;
+    top: 8px;
+    padding: 7px;
+    font-size: 14px;
+    cursor: pointer;
+    display: none;
+}
+
+.search_clear:hover {
+    background: white url('https://developers.woosmap.com/img/close-hover.png') no-repeat left top;
+}
+
+.woosmap-tableview-highlighted-cell {
+    background-color: #f8f8f8;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #d1d1d1;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #F7F7F7;
+}
+
+/*grids*/
+.pure-g {
+    letter-spacing: -.31em;
+    text-rendering: optimizespeed;
+    display: -webkit-flex;
+    -webkit-flex-flow: row wrap;
+    display: -ms-flexbox;
+    -ms-flex-flow: row wrap;
+    -ms-align-content: flex-start;
+    -webkit-align-content: flex-start;
+    align-content: flex-start;
+}
+
+.pure-g [class *="pure-u"] {
+    font-family: "Open Sans", "Helvetica Neue", Arial, Helvetica, Verdana, sans-serif;
+    font-weight: normal;
+    letter-spacing: 0.01em;
+}
+
+.pure-u-1, .u-sm-1-3, .u-sm-2-3 {
+    display: inline-block;
+    zoom: 1;
+    letter-spacing: normal;
+    word-spacing: normal;
+    vertical-align: top;
+    text-rendering: auto;
+}
+
+.pure-u-1 {
+    width: 100%;
+}
+
+@media screen and (min-width: 35.5em) {
+    .u-sm-1-3 {
+        width: 33.3333%;
+    }
+
+    .u-sm-2-3 {
+        width: 66.5%;
+    }
+}

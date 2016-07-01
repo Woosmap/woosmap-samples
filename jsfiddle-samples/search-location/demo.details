@@ -1,0 +1,6 @@
+---
+name: SearchLocation - Woosmap Javascript API Search Location Demo
+description: jsFiddle demo that allow the use of Google maps basic geocoding using Woosmap Javascript API.
+authors:
+  - Woosmap DevTeam
+...
