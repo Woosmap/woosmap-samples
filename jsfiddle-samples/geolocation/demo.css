@@ -42,23 +42,6 @@
 }
 
 /*pure-css*/
-.pure-g {
-    letter-spacing: -.31em;
-    text-rendering: optimizespeed;
-    display: -webkit-flex;
-    -webkit-flex-flow: row wrap;
-    display: -ms-flexbox;
-    -ms-flex-flow: row wrap;
-    -ms-align-content: flex-start;
-    -webkit-align-content: flex-start;
-    align-content: flex-start;
-}
-
-.pure-g [class *="pure-u"] {
-    font-family: "Open Sans", "Helvetica Neue", Arial, Helvetica, Verdana, sans-serif;
-    font-weight: normal;
-    letter-spacing: 0.01em;
-}
 
 .pure-button {
     /* Structure */
@@ -113,3 +96,9 @@
     border-color: #000 \9;
 }
 
+hr {
+    border: 0;
+    height: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
