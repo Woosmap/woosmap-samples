@@ -32,7 +32,7 @@ function registerDraggableMarker(mapView) {
 /*----- Init and display a Map with a TiledLayer-----*/
 function woosmap_main() {
     var self = this;
-    var loader = new woosmap.MapsLoader("", ['places']);
+    var loader = new woosmap.MapsLoader();
     var dataSource = new woosmap.DataSource();
     loader.load(function () {
         var tableview = new woosmap.ui.TableView({
@@ -57,11 +57,9 @@ function woosmap_main() {
 
         self.tableview = tableview;
         var defaultStores = null;
-        var map = new google.maps.Map(woosmap.$('#map')[0], {
-            center: {lat: 42, lng: 3},
-            zoom: 7,
-            scrollwheel: false,
-            draggable: false
+        var map = new google.maps.Map(woosmap.$('#my-map')[0], {
+            center: {lat: 46, lng: 3},
+            zoom: 5
         });
 
         var mapView = new woosmap.TiledView(map, {style: markersStyle, tileStyle: tilesStyle});
@@ -74,10 +72,7 @@ function woosmap_main() {
             }
         };
 
-
-        mapView.marker.setOptions({
-            draggable: true
-        });
+        registerDraggableMarker(mapView);
 
         searchview.delegate = {
             didClearSearch: function () {
@@ -92,5 +87,5 @@ function woosmap_main() {
 }
 
 document.addEventListener("DOMContentLoaded", function (event) {
-    WoosmapLoader.load('1.2', projectKey, woosmap_main);
+    WoosmapLoader.load('latest', projectKey, woosmap_main);
 });
