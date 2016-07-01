@@ -1,3 +1,8 @@
+.bg {
+    background: white;
+    padding: 5px;
+}
+
 .nearest-store-map {
     height: 250px;
     width: 76%;
