@@ -1,15 +1,21 @@
 var projectKey = '12345678';
 var markersStyle = {
-    rules: [
-        {
-            type: 'drive',
-            icon: {url: 'https://developers.woosmap.com/img/markers/marker_drive.png'},
-            selectedIcon: {url: 'https://developers.woosmap.com/img/markers/marker_selected.png'}
+    rules: [{
+        type: 'drive',
+        icon: {
+            url: 'https://developers.woosmap.com/img/markers/marker_drive.png'
+        },
+        selectedIcon: {
+            url: 'https://developers.woosmap.com/img/markers/marker_selected.png'
         }
-    ],
+    }],
     default: {
-        icon: {url: 'https://developers.woosmap.com/img/markers/marker_default.png'},
-        selectedIcon: {url: 'https://developers.woosmap.com/img/markers/marker_selected.png'}
+        icon: {
+            url: 'https://developers.woosmap.com/img/markers/marker_default.png'
+        },
+        selectedIcon: {
+            url: 'https://developers.woosmap.com/img/markers/marker_selected.png'
+        }
     }
 };
 var tilesStyle = {
@@ -22,6 +28,14 @@ var tilesStyle = {
     }]
 };
 
+function registerDraggableMarker(mapView) {
+    mapView.marker.setOptions({
+        draggable: true,
+        icon: {
+            url: 'https://developers.woosmap.com/img/markers/geolocated.png'
+        }
+    });
+}
 
 /*----- Init and display a Map with a TiledLayer-----*/
 function woosmap_main() {
@@ -31,30 +45,26 @@ function woosmap_main() {
     loader.load(function () {
 
         var map = new google.maps.Map(woosmap.$('#my-map')[0], {
-            center: {lat: 46, lng: 3},
+            center: {
+                lat: 46,
+                lng: 3
+            },
             zoom: 5
         });
 
-        var mapView = new woosmap.TiledView(map, {style: markersStyle, tileStyle: tilesStyle});
-
-        var tableview = new woosmap.ui.TableView({
-            cell_store: woosmap.$("#store-row-template").html()
+        var mapView = new woosmap.TiledView(map, {
+            style: markersStyle,
+            tileStyle: tilesStyle
         });
-        mapView.bindTo('stores', tableview);
-        mapView.bindTo('selectedStore', tableview, 'selectedStore', false);
 
         var searchview = new woosmap.ui.SearchView(woosmap.$('#search_template').text());
 
         var initialSearchTextOptions = {
-            name: woosmap.DataSearchSource.OR,
-            city: woosmap.DataSearchSource.OR
+            name: woosmap.search.SearchQuery.OR,
+            city: woosmap.search.SearchQuery.OR
         };
-        var dataSearchSource = new woosmap.DataSearchSource(dataSource, initialSearchTextOptions);
-        dataSearchSource.bindTo('autocomplete_query', searchview, 'autocomplete_query', false);
-        tableview.bindTo('stores', dataSearchSource);
+        var searchQuery = new woosmap.search.SearchQuery(initialSearchTextOptions);
 
-        var listings = woosmap.$('#listings');
-        listings.append(tableview.getContainer());
         var searchTextOptionsRenderer = new woosmap.TemplateRenderer(woosmap.$("#text-search-options-template").html());
         var tagsRenderer = new woosmap.TemplateRenderer(woosmap.$("#tags-selector-template").html());
         var typesRenderer = new woosmap.TemplateRenderer(woosmap.$("#types-selector-template").html());
@@ -66,43 +76,50 @@ function woosmap_main() {
         var sidebar = woosmap.$('.sidebar');
         sidebar.prepend(attributeSearchContainer);
 
-        function typeOrTagChanged(typeOrTag) {
-            var newFilters = [];
-            woosmap.$.each(woosmap.$('.woosmap-available-' + typeOrTag + ':checked'), function (index, object) {
-                newFilters.push({
-                    value: woosmap.$(object).val(),
-                    operator: woosmap.DataSearchSource.AND
-                });
+        function typeChanged() {
+            searchQuery.types = [];
+            woosmap.$.each(woosmap.$('.woosmap-available-type:checked'), function (index, object) {
+                searchQuery.addTypeFilter(woosmap.$(object).val(), woosmap.search.SearchQuery.AND);
             });
-            dataSearchSource.updateSearchQueryAndSearch(typeOrTag + 's', newFilters);
+            mapView.setSearchQuery(searchQuery);
+        }
+
+        function tagChanged() {
+            searchQuery.tags = [];
+            woosmap.$.each(woosmap.$('.woosmap-available-tag:checked'), function (index, object) {
+                searchQuery.addTagFilter(woosmap.$(object).val(), woosmap.search.SearchQuery.AND);
+            });
+            mapView.setSearchQuery(searchQuery);
         }
 
         woosmap.$('.woosmap-available-tag').click(function () {
-            typeOrTagChanged('tag');
+            tagChanged();
         });
 
         woosmap.$('.woosmap-available-type').click(function () {
-            typeOrTagChanged('type');
+            typeChanged();
         });
 
         woosmap.$('.woosmap-text-search-param').click(function () {
             if (this.checked) {
-                dataSearchSource.addFieldToSearchTextOptions(woosmap.$(this).val(), woosmap.DataSearchSource.OR)
+                searchQuery.addQueryOption(woosmap.$(this).val(), woosmap.search.SearchQuery.OR)
             } else {
-                dataSearchSource.removeFieldFromSearchTextOptions(woosmap.$(this).val());
+                searchQuery.removeQueryOption(woosmap.$(this).val())
             }
+            mapView.setSearchQuery(searchQuery);
+        });
+
+        woosmap.$('.search_input').on("change paste keyup", function () {
+            searchQuery.setQuery(woosmap.$(this).val());
+            mapView.setSearchQuery(searchQuery);
         });
 
         searchview.delegate = {
             didClearSearch: function () {
-                mapView.set('stores', defaultStores);
+                searchQuery.setQuery('');
+                mapView.setSearchQuery(searchQuery);
             }
         };
-         //initialize the map
-        dataSource.getAllStores(function (stores) {
-            defaultStores = stores.features;
-            mapView.set('stores', stores.features);
-        });
     });
 
 }
@@ -110,3 +127,4 @@ function woosmap_main() {
 document.addEventListener("DOMContentLoaded", function (event) {
     WoosmapLoader.load('1.2', projectKey, woosmap_main);
 });
+

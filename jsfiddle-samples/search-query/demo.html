@@ -1,54 +1,54 @@
 <script src="https://sdk.woosmap.com/locator/loader.js"></script>
 <script id="search_template" type="text/mustache">
-    <div>
-        <input class="search_input" placeholder="Search in checked fields"/>
-        <span class="search_clear"></span>
-    </div>
-
-
+  <div>
+    <input class="search_input" placeholder="Search in checked fields" />
+    <span class="search_clear"></span>
+  </div>
 </script>
-<script id="store-row-template" type="text/mustache">
-    <div id="item" class="item">
-        <a class="title">
-            {{ name }} ({{ store_id }})<br>
-            <small class="quiet">{{ address.city}}</small>
-        </a>
-        <div>
-            {{ address.lines }} {{ address.city }} {{ address.zip }}
-        </div>
-    </div>
 
-
-</script>
 <script id="types-selector-template" type="text/mustache">
-    <div class="attribute-filter-container">
-        <div class="attribute-filter-title">Filter by store type</div>
-        <div class="attribute-filter-body">
-            <div><input type="checkbox" value="AuchanEM" class="woosmap-available-type checkbox-input-attribute">AuchanEM</div>
-            <div><input type="checkbox" value="drive" class="woosmap-available-type checkbox-input-attribute">Drive</div>
-            <div><input type="checkbox" value="AuchanFR" class="woosmap-available-type checkbox-input-attribute">AuchanFR</div>
-        </div>
+  <div class="attribute-filter-container">
+    <div class="attribute-filter-title">Filter by store type</div>
+    <div class="attribute-filter-body">
+      <div>
+        <input type="checkbox" value="AuchanEM" class="woosmap-available-type checkbox-input-attribute">AuchanEM</div>
+      <div>
+        <input type="checkbox" value="drive" class="woosmap-available-type checkbox-input-attribute">Drive</div>
+      <div>
+        <input type="checkbox" value="AuchanFR" class="woosmap-available-type checkbox-input-attribute">AuchanFR</div>
+    </div>
     <div>
+
+
 
 
 </script>
 <script id="tags-selector-template" type="text/mustache">
-    <div class="attribute-filter-container">
-        <div class="attribute-filter-title">Filter by store tag</div>
-        <div class="attribute-filter-body">
-            <div><input type="checkbox" value="pharmacy" class="woosmap-available-tag checkbox-input-attribute">Pharmacy</div>
-            <div><input type="checkbox" value="filling station" class="woosmap-available-tag checkbox-input-attribute">Filling station</div>
-        </div>
+  <div class="attribute-filter-container">
+    <div class="attribute-filter-title">Filter by store tag</div>
+    <div class="attribute-filter-body">
+      <div>
+        <input type="checkbox" value="pharmacy" class="woosmap-available-tag checkbox-input-attribute">Pharmacy</div>
+      <div>
+        <input type="checkbox" value="filling station" class="woosmap-available-tag checkbox-input-attribute">Filling station</div>
+    </div>
     <div>
+
+
 
 
 </script>
 <script id="text-search-options-template" type="text/mustache">
-    <div  class="attribute-filter-container">
-        <div><input type="checkbox" value="name" class="woosmap-text-search-param checkbox-input-attribute" checked>Name</div>
-        <div><input type="checkbox" value="city" class="woosmap-text-search-param checkbox-input-attribute" checked>City</div>
-        <div><input type="checkbox" value="idstore" class="woosmap-text-search-param checkbox-input-attribute">IDStore</div>
-    </div>
+  <div class="attribute-filter-container">
+    <div>
+      <input type="checkbox" value="name" class="woosmap-text-search-param checkbox-input-attribute" checked>Name</div>
+    <div>
+      <input type="checkbox" value="city" class="woosmap-text-search-param checkbox-input-attribute" checked>City</div>
+    <div>
+      <input type="checkbox" value="idstore" class="woosmap-text-search-param checkbox-input-attribute">IDStore</div>
+  </div>
+
+
 </script>
 
 <div class="locator-container pure-g">
@@ -57,3 +57,4 @@
     </div>
     <div id="my-map" class="map pure-u-1 u-sm-2-3"></div>
 </div>
+
