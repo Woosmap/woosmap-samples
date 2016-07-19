@@ -465,6 +465,291 @@
           "7": []
         }
       }
+    },
+    {
+      "types": [
+        "covered"
+      ],
+      "location": {
+        "lat": 43.40214,
+        "lng": 3.69545
+      },
+      "storeId": "hallesdesete",
+      "name": "Halles de Sète",
+      "address": {
+        "lines": [
+          "Rue Gambetta"
+        ],
+        "country": "France",
+        "city": "Sète",
+        "zipcode": "34200"
+      },
+      "contact": {
+        "website": "http://www.halles-sete.com/",
+        "phone": "04 99 04 70 00",
+        "email": "commerce-artisanat@ville-sete.fr"
+      },
+      "openingHours": {
+        "timezone": "Europe/Paris",
+        "usual": {
+          "default": [
+            {
+              "start": "08:00",
+              "end": "13:00"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "types": [
+        "outside"
+      ],
+      "location": {
+        "lat": 44.011821,
+        "lng": 4.418889
+      },
+      "storeId": "marcheduzes",
+      "name": "Marché d'Uzès",
+      "address": {
+        "lines": [
+          "Place aux Herbes"
+        ],
+        "country": "France",
+        "city": "Uzès",
+        "zipcode": "30700"
+      },
+      "contact": {
+        "website": "http://www.uzes.fr/Calendrier-des-marches-brocantes-et-foires_a126.html",
+        "phone": "+33 (0)4 66 22 68 88"
+      },
+      "openingHours": {
+        "timezone": "Europe/Paris",
+        "usual": {
+          "default": [
+            {
+              "start": "07:30",
+              "end": "13:00"
+            }
+          ],
+          "1": [],
+          "2": [],
+          "4": [],
+          "5": [],
+          "7": []
+        }
+      }
+    },
+    {
+      "types": [
+        "outside"
+      ],
+      "location": {
+        "lat": 43.876503,
+        "lng": 5.393588
+      },
+      "storeId": "marchedapt",
+      "name": "Le Grand Marché d'Apt",
+      "address": {
+        "lines": [
+          "Place de la Bouquerie"
+        ],
+        "country": "France",
+        "city": "Apt",
+        "zipcode": "84400"
+      },
+      "contact": {
+        "website": "http://www.luberon-apt.fr/index.php/fr/sortir/les-marches",
+        "phone": "+33 (0)4 90 74 03 18",
+        "email": "oti@paysapt-luberon.fr"
+      },
+      "openingHours": {
+        "timezone": "Europe/Paris",
+        "usual": {
+          "default": [
+            {
+              "start": "08:00",
+              "end": "13:00"
+            }
+          ],
+          "1": [],
+          "2": [],
+          "3": [],
+          "4": [],
+          "5": [],
+          "7": []
+        }
+      }
+    },
+    {
+      "types": [
+        "outside"
+      ],
+      "location": {
+        "lat": 46.187465,
+        "lng": -1.327086
+      },
+      "storeId": "marchedelaflotte",
+      "name": "Le Marché de la Flotte",
+      "address": {
+        "lines": [
+          "Rue du Marché"
+        ],
+        "country": "France",
+        "city": "La Flotte",
+        "zipcode": "17630"
+      },
+      "contact": {
+        "website": "http://laflotte.fr/index.php/Vie-quotidienne/les-marches.html",
+        "phone": "05.46.09.15.00",
+        "email": "annie@laflotte.fr"
+      },
+      "openingHours": {
+        "timezone": "Europe/Paris",
+        "usual": {
+          "default": [
+            {
+              "start": "08:00",
+              "end": "13:00"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "types": [
+        "outside"
+      ],
+      "location": {
+        "lat": 55.947817,
+        "lng": -3.203562
+      },
+      "storeId": "edimburghfarmersmarket",
+      "name": "Edimburgh Farmers' Market",
+      "address": {
+        "lines": [
+          "Castle Terrace"
+        ],
+        "country": "Scotland",
+        "city": "Edimburgh",
+        "zipcode": "EH1 UK"
+      },
+      "contact": {
+        "website": "http://www.edinburghfarmersmarket.co.uk/",
+        "phone": "0131 220 8580"
+      },
+      "openingHours": {
+        "timezone": "Europe/London",
+        "usual": {
+          "default": [],
+          "6": [
+            {
+              "start": "09:00",
+              "end": "14:00"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "types": [
+        "covered"
+      ],
+      "location": {
+        "lat": 54.596073,
+        "lng": -5.921654
+      },
+      "storeId": "stgeorgesmarket",
+      "name": "St George's Market",
+      "address": {
+        "lines": [
+          "12 - 20 East Bridge Street"
+        ],
+        "country": "Ireland",
+        "city": "Belfast",
+        "zipcode": "BT1 3NQ"
+      },
+      "contact": {
+        "website": "http://www.belfastcity.gov.uk/tourism-venues/stgeorgesmarket/stgeorgesmarket-index.aspx",
+        "phone": "028 9043 5704",
+        "email": "markets@belfastcity.gov.uk"
+      },
+      "openingHours": {
+        "timezone": "Europe/London",
+        "usual": {
+          "default": [],
+          "5": [
+            {
+              "start": "06:00",
+              "end": "14:00"
+            }
+          ],
+          "6": [
+            {
+              "start": "09:00",
+              "end": "15:00"
+            }
+          ],
+          "7": [
+            {
+              "start": "10:00",
+              "end": "16:00"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "types": [
+        "covered"
+      ],
+      "location": {
+        "lat": 50.626710,
+        "lng": 3.049325
+      },
+      "storeId": "hallesdewazemmes",
+      "name": "Halles de Wazemmes",
+      "address": {
+        "lines": [
+          "Place de la nouvelle aventure"
+        ],
+        "country": "France",
+        "city": "Lille",
+        "zipcode": "59000"
+      },
+      "contact": {
+        "website": "http://www.halles-wazemmes.com/"
+      },
+      "openingHours": {
+        "timezone": "Europe/Paris",
+        "usual": {
+          "default": [
+            {
+              "start": "08:00",
+              "end": "14:00"
+            }
+          ],
+          "1":[],
+          "5": [
+            {
+              "start": "08:00",
+              "end": "20:00"
+            }
+          ],
+          "6": [
+            {
+              "start": "08:00",
+              "end": "20:00"
+            }
+          ],
+          "7": [
+            {
+              "start": "08:00",
+              "end": "15:00"
+            }
+          ]
+        }
+      }
     }
   ]
 }
