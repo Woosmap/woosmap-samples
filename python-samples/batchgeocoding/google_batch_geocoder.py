@@ -1,4 +1,6 @@
 import csv
+import os
+import time
 from _csv import QUOTE_MINIMAL
 from csv import Dialect
 from geopy.geocoders import GoogleV3
@@ -15,15 +17,17 @@ NEW_COLUMNS_NAME = ["Lat", "Long", "Error", "formatted_address", "location_type"
 # delimiter for input csv file
 DELIMITER = ";"
 
-# path and name for output csv file
-INPUT_CSV_FILE = "./hairdresser_sample_addresses.csv"
+dir = os.path.dirname(__file__)
 
 # path and name for output csv file
-OUTPUT_CSV_FILE = "./processed.csv"
+INPUT_CSV_FILE = os.path.join(dir, "hairdresser_sample_addresses.csv")
+
+# path and name for output csv file
+OUTPUT_CSV_FILE = os.path.join(dir, "processed.csv")
 
 # google keys - see https://blog.woosmap.com for more details
-GOOGLE_SECRET_KEY = "" # important !! this key must stay private. TODO : pass this variable as a parameter to this script
-GOOGLE_CLIENT_ID = "" # if used, you must provide secret_key
+GOOGLE_SECRET_KEY = ""  # important !! this key must stay private. TODO : pass this variable as a parameter to script
+GOOGLE_CLIENT_ID = ""  # Only for Premium users so if used, you must also provide secret_key
 
 
 # dialect to manage different format of CSV
@@ -81,13 +85,10 @@ def process_addresses_from_csv():
                 location = geocode_address(geo_locator, line_address, component_restrictions)
 
                 # build a new temp_row for each csv entry to append to process_data Array
-                temp_row = []
+                # first, append existing fieldnames value to this temp_row
+                temp_row = [record[column_name] for column_name in reader.fieldnames]
 
-                # append existing fieldnames value to this temp_row
-                for column_name in reader.fieldnames:
-                    temp_row.append(record[column_name])
-
-                # append geocoded field value to this temp_row
+                # then, append geocoded field value to this temp_row
                 for column_name in NEW_COLUMNS_NAME:
                     try:
                         if isinstance(location[column_name], str):
@@ -111,14 +112,21 @@ def process_addresses_from_csv():
 
 def geocode_address(geo_locator, line_address, component_restrictions=None):
     try:
+        # if not using Google Map API For Work (Standard instead of Premium) you will raise an OVER_QUERY_LIMIT
+        # due to the quotas request per seconds. So we have to sleep 500 ms between each request to Geocoding Service.
+        if not GOOGLE_SECRET_KEY:
+            time.sleep(0.5)
+
         # the geopy GoogleV3 geocoding call
         location = geo_locator.geocode(line_address, components=component_restrictions)
+
         # build a dict to append to output CSV
         location_result = {"Lat": location.latitude, "Long": location.longitude, "Error": "",
                            "formatted_address": location.raw['formatted_address'],
                            "location_type": location.raw['geometry']['location_type']}
 
     except BaseException as error:
+        print(error)
         location_result = {"Lat": 0, "Long": 0, "Error": error.message, "formatted_address": "", "location_type": ""}
 
     print("address line     : %s" % line_address)
