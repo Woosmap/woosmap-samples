@@ -4,6 +4,12 @@ import time
 from _csv import QUOTE_MINIMAL
 from csv import Dialect
 from geopy.geocoders import GoogleV3
+from geopy.exc import (
+    GeocoderQueryError,
+    GeocoderQuotaExceeded,
+    ConfigurationError,
+    GeocoderParseError,
+)
 
 # used to set a google geocoding query by merging this value into one string with comma separated
 ADDRESS_COLUMNS_NAME = ["name", "addressline1", "town"]
@@ -16,6 +22,9 @@ NEW_COLUMNS_NAME = ["Lat", "Long", "Error", "formatted_address", "location_type"
 
 # delimiter for input csv file
 DELIMITER = ";"
+
+# Automatically retry X times when GeocoderErrors occur (sometimes the API Service return intermittent failures).
+RETRY_COUNTER_CONST = 5
 
 dir = os.path.dirname(__file__)
 
@@ -110,7 +119,7 @@ def process_addresses_from_csv():
                 print(error)
 
 
-def geocode_address(geo_locator, line_address, component_restrictions=None):
+def geocode_address(geo_locator, line_address, component_restrictions=None, retry_counter=0):
     try:
         # if not using Google Map API For Work (Standard instead of Premium) you will raise an OVER_QUERY_LIMIT
         # due to the quotas request per seconds. So we have to sleep 500 ms between each request to Geocoding Service.
@@ -120,14 +129,25 @@ def geocode_address(geo_locator, line_address, component_restrictions=None):
         # the geopy GoogleV3 geocoding call
         location = geo_locator.geocode(line_address, components=component_restrictions)
 
-        # build a dict to append to output CSV
-        location_result = {"Lat": location.latitude, "Long": location.longitude, "Error": "",
-                           "formatted_address": location.raw['formatted_address'],
-                           "location_type": location.raw['geometry']['location_type']}
+        if location is not None:
+            # build a dict to append to output CSV
+            location_result = {"Lat": location.latitude, "Long": location.longitude, "Error": "",
+                               "formatted_address": location.raw['formatted_address'],
+                               "location_type": location.raw['geometry']['location_type']}
+        else:
+            raise ValueError("None location found, please verify your address line")
 
-    except BaseException as error:
-        print(error)
+    # To catch generic geocoder errors. TODO : Handle finer-grained exceptions
+    except (ValueError, GeocoderQuotaExceeded, ConfigurationError, GeocoderParseError) as error:
         location_result = {"Lat": 0, "Long": 0, "Error": error.message, "formatted_address": "", "location_type": ""}
+
+    # To retry because intermittent failures sometimes occurs
+    except (GeocoderQueryError) as error:
+        if retry_counter < RETRY_COUNTER_CONST:
+            return geocode_address(geo_locator, line_address, component_restrictions, retry_counter + 1)
+        else:
+            location_result = {"Lat": 0, "Long": 0, "Error": error.message, "formatted_address": "",
+                               "location_type": ""}
 
     print("address line     : %s" % line_address)
     print("geocoded address : %s" % location_result["formatted_address"])
