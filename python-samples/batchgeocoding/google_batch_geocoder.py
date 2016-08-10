@@ -37,6 +37,7 @@ OUTPUT_CSV_FILE = os.path.join(dir, "processed.csv")
 # google keys - see https://blog.woosmap.com for more details
 GOOGLE_SECRET_KEY = ""  # important !! this key must stay private. TODO : pass this variable as a parameter to script
 GOOGLE_CLIENT_ID = ""  # Only for Premium users so if used, you must also provide secret_key
+GOOGLE_API_KEY = ""  # it will become a mandatory parameter soon
 
 
 # dialect to manage different format of CSV
@@ -53,7 +54,7 @@ csv.register_dialect('ga', CustomDialect)
 
 
 def process_addresses_from_csv():
-    geo_locator = GoogleV3(client_id=GOOGLE_CLIENT_ID, secret_key=GOOGLE_SECRET_KEY)
+    geo_locator = GoogleV3(api_key=GOOGLE_API_KEY, client_id=GOOGLE_CLIENT_ID, secret_key=GOOGLE_SECRET_KEY)
 
     with open(INPUT_CSV_FILE, 'r') as csvinput:
         with open(OUTPUT_CSV_FILE, 'w') as csvoutput:
