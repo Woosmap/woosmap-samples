@@ -54,7 +54,9 @@ csv.register_dialect('ga', CustomDialect)
 
 
 def process_addresses_from_csv():
-    geo_locator = GoogleV3(api_key=GOOGLE_API_KEY, client_id=GOOGLE_CLIENT_ID, secret_key=GOOGLE_SECRET_KEY)
+    geo_locator = GoogleV3(api_key=GOOGLE_API_KEY,
+                           client_id=GOOGLE_CLIENT_ID,
+                           secret_key=GOOGLE_SECRET_KEY)
 
     with open(INPUT_CSV_FILE, 'r') as csvinput:
         with open(OUTPUT_CSV_FILE, 'w') as csvoutput:
