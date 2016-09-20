@@ -9,10 +9,6 @@ api_server_host = 'api.woosmap.com'
 geojson_features = []
 
 
-class InvalidGeometry(Exception):
-    pass
-
-
 def get_geometry(store):
     return {
         'lat': store['geometry']['coordinates'][1],
@@ -20,9 +16,9 @@ def get_geometry(store):
     }
 
 
-def transform_geojson_woosmap(stores_geojson):
+def transform_geojson_woosmap(extracted_geojson):
     stores = []
-    for feature in stores_geojson:
+    for feature in extracted_geojson:
         stores.append({"location": get_geometry(feature),
                        "storeId": feature['properties']['store_id'],
                        "openingHours": feature["properties"]["opening_hours"],
