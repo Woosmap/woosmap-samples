@@ -3,6 +3,7 @@ import requests
 
 origin_public_key = ''
 private_key = ''
+output_file = 'data.json'
 allowed_referer = 'http://localhost/'
 api_server_host = 'api.woosmap.com'
 geojson_features = []
@@ -22,10 +23,15 @@ def get_geometry(store):
 def transform_geojson_woosmap(stores_geojson):
     stores = []
     for feature in stores_geojson:
-        feature["properties"]["location"] = get_geometry(feature)
-        feature["properties"]["storeId"] = feature['properties']['store_id']
-        feature["properties"]["openingHours"] = feature["properties"]["opening_hours"]
-        stores.append(feature["properties"])
+        stores.append({"location": get_geometry(feature),
+                       "storeId": feature['properties']['store_id'],
+                       "openingHours": feature["properties"]["opening_hours"],
+                       "userProperties": feature["properties"]["user_properties"],
+                       "types": feature["properties"]["types"],
+                       "address": feature["properties"]["address"],
+                       "name": feature["properties"]["name"],
+                       "tags": feature["properties"]["tags"],
+                       "contact": feature["properties"]["contact"]})
 
     return stores
 
@@ -49,6 +55,11 @@ def get_all_stores(page=1):
     return geojson_features
 
 
+def export_input_json(inputjson):
+    with open(output_file, 'w') as outfile:
+        json.dump(inputjson, outfile)
+
+
 def import_location(locations):
     print('Importing locations (%d) ...' % len(locations))
     response = session.post(
@@ -68,9 +79,12 @@ def import_location(locations):
 
 if __name__ == '__main__':
     session = requests.Session()
-    stores_geojson = get_all_stores()
     try:
+        stores_geojson = get_all_stores()
         stores_woosmap = transform_geojson_woosmap(stores_geojson)
-        import_location(stores_woosmap)
-    except BaseException:
-        pass
+        if output_file:
+            export_input_json(stores_woosmap)
+        if private_key:
+            import_location(stores_woosmap)
+    except BaseException as error:  # bad bad way!
+        print('An exception occurred: {}'.format(error))
