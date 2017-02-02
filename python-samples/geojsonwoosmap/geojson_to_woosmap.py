@@ -1,5 +1,6 @@
-import json, pprint
+import json
 import requests
+import codecs
 
 origin_public_key = ''
 private_key = ''
@@ -7,7 +8,7 @@ output_file = 'data.json'
 allowed_referer = 'http://localhost/'
 api_server_host = 'api.woosmap.com'
 geojson_features = []
-stores_batch_size = 500
+stores_batch_size = 200
 
 
 def get_geometry(store):
@@ -24,13 +25,13 @@ def transform_geojson_woosmap(extracted_geojson):
             prop = feature["properties"]
             stores.append({"location": get_geometry(feature),
                            "storeId": prop.get("store_id"),
-                           "openingHours": prop.get("opening_hours"),
-                           "userProperties": prop.get("user_properties"),
-                           "types": prop.get("types"),
-                           "address": prop.get("address"),
-                           "name": prop.get("name"),
-                           "tags": prop.get("tags"),
-                           "contact": prop.get("contact")})
+                           "openingHours": prop.get("opening_hours", {}),
+                           "userProperties": prop.get("user_properties", {}),
+                           "types": prop.get("types", []),
+                           "address": prop.get("address", {}),
+                           "name": prop.get("name", ""),
+                           "tags": prop.get("tags", []),
+                           "contact": prop.get("contact", {})})
         except BaseException as error:
             print('An exception occurred: {}'.format(error))
 
@@ -57,8 +58,8 @@ def get_all_stores(page=1):
 
 
 def export_input_json(inputjson):
-    with open(output_file, 'w') as outfile:
-        json.dump(inputjson, outfile)
+    with codecs.open(output_file, 'w', encoding='utf8') as outfile:
+        json.dump(inputjson, outfile, indent=2, ensure_ascii=False)
 
 
 def import_location(locations):
