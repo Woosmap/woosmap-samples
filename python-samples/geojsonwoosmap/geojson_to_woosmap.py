@@ -8,7 +8,7 @@ output_file = 'data.json'
 allowed_referer = 'http://localhost/'
 api_server_host = 'api.woosmap.com'
 geojson_features = []
-stores_batch_size = 200
+stores_batch_size = 500
 
 
 def get_geometry(store):
@@ -65,7 +65,7 @@ def export_input_json(inputjson):
 def import_location(locations):
     print('Importing locations (%d) ...' % len(locations))
     response = session.post(
-        'http://{api_server_host}/stores/replace'.format(
+        'http://{api_server_host}/stores'.format(
             api_server_host=api_server_host),
         params={'private_key': private_key},
         json={'stores': locations})
