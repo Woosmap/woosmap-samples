@@ -10,11 +10,13 @@ from tzwhere import tzwhere
 sys.stdout = codecs.getwriter('utf8')(sys.stdout)
 sys.stderr = codecs.getwriter('utf8')(sys.stderr)
 
-YOUR_API_KEY = "AIzaSyDRcaVMH1F_#######-kqnyeaNhBA3iQQ" # YOUR GOOGLE_API_KEY
-KEYWORD_SEARCH = '' # Your Search
+YOUR_API_KEY = "AIzaSyDRcaVMH1F_XXXXXX-kqnyeaNhBA3iQQ"  # YOUR GOOGLE_API_KEY
+KEYWORD_SEARCH = ''  # Your Search
 COUNTRY = "France"
 OUTPUT_JSON = "_".join(KEYWORD_SEARCH.split()).lower() + "_" + COUNTRY.lower() + "_google_places_data.json"
 GRID_CITY_PATH = "grid_city.json"
+EXACT_MATCH = False
+RETRY_COUNTER_CONST = 3  # for get_timezone due to some failure
 
 tz = tzwhere.tzwhere()
 stores = []
@@ -34,6 +36,16 @@ def get_id(places_location):
     return places_location.get('place_id').translate({ord(c): None for c in '-_!@#$'})
 
 
+def get_timezone(lat, long, retry_counter=0):
+    timezone = tz.tzNameAt(lat, long)
+    if not timezone and retry_counter < RETRY_COUNTER_CONST:
+        time.sleep(0.5)
+        return get_timezone(lat, long, retry_counter + 1)
+
+    return timezone
+
+
+# TODO : Update for multi opening and closing in a day
 def get_hours(places_location):
     weekdays = [1, 2, 3, 4, 5, 6, 0]
     day_index = 1
@@ -41,8 +53,8 @@ def get_hours(places_location):
     day_hours = places_location.get('opening_hours', {})
 
     try:
-        timezone = tz.tzNameAt(float(places_location['geometry']['location']['lat']),
-                               float(places_location['geometry']['location']['lng']))
+        timezone = get_timezone(float(places_location['geometry']['location']['lat']),
+                                float(places_location['geometry']['location']['lng']))
         for day in weekdays:
             hours = []
             start_hour = ""
@@ -135,7 +147,9 @@ if __name__ == '__main__':
                     placesId.append(place.place_id)
                     # The following method has to make a further API call.
                     place.get_details()
-                    if KEYWORD_SEARCH in place.name:
+                    if EXACT_MATCH and KEYWORD_SEARCH in place.name:
+                        stores.append(google2woosmap(place.details))
+                    elif not EXACT_MATCH:
                         stores.append(google2woosmap(place.details))
 
             # Are there any additional pages of results?
@@ -149,6 +163,7 @@ if __name__ == '__main__':
 
         except Exception:
             time.sleep(5)
+            print "Exception  for : " + city_location
             pass
 
     export_input_json(stores)
