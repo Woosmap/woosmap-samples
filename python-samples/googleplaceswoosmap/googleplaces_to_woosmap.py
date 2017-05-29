@@ -37,8 +37,8 @@ def get_id(places_location):
 
 
 def get_timezone(lat, long, retry_counter=0):
-    timezone = tz.tzNameAt(lat, long)
-    if not timezone and retry_counter < RETRY_COUNTER_CONST:
+    timezone = tz.tzNameAt(lat, long, True)
+    if timezone is None and retry_counter < RETRY_COUNTER_CONST:
         time.sleep(0.5)
         return get_timezone(lat, long, retry_counter + 1)
 
