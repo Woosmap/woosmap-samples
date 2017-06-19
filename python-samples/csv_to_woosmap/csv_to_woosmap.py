@@ -9,7 +9,6 @@ YOUR_INPUT_CSV_FILE = 'foodmarkets.csv'
 WOOSMAP_PRIVATE_API_KEY = '23713926-1af5-4321-ba54-032966f6e95d'
 WOOSMAP_API_HOSTNAME = 'api.woosmap.com'
 BATCH_SIZE = 5
-ALLOWED_REFERRER = 'http://localhost/'
 
 
 class MyCSVDialect(csv.Dialect):
@@ -24,7 +23,6 @@ class MyCSVDialect(csv.Dialect):
 class WoosmapAPIHelper:
     def __init__(self):
         self.session = requests.Session()
-        self.session.headers.update({'referer': ALLOWED_REFERRER})
 
     def delete(self):
         self.session.delete('https://{hostname}/stores/'.format(hostname=WOOSMAP_API_HOSTNAME),
@@ -92,7 +90,7 @@ def convert_to_woosmap(asset):
             'location': get_geometry(asset)
         })
     except ValueError as ve:
-        print("ValueError Raised {0} for Asset {1}".format(ve, json.dumps(asset, indent=2)))
+        print('ValueError Raised {0} for Asset {1}'.format(ve, json.dumps(asset, indent=2)))
 
     return converted_asset
 
@@ -111,7 +109,7 @@ def import_assets(assets_data, woosmap_api_helper):
             print('Error requesting the API: {0}'.format(http_exception))
         return False
     except Exception as exception:
-        print("Failed importing Assets! {0}".format(exception))
+        print('Failed importing Assets! {0}'.format(exception))
         return False
 
     print('Successfully imported in {0} seconds'.format(response.elapsed.total_seconds()))
@@ -151,10 +149,10 @@ def main():
             woosmap_api_helper.end()
             print("{0} Assets successfully imported".format(count_imported_assets))
 
-        except csv.Error as e:
-            print('Error in CSV file found: {0}'.format(e))
-        except Exception as e:
-            print("Script Failed! {0}".format(e))
+        except csv.Error as csv_error:
+            print('Error in CSV file found: {0}'.format(csv_error))
+        except Exception as exception:
+            print("Script Failed! {0}".format(exception))
         finally:
             end = time.time()
             print('...Script ended in {0} seconds'.format(end - start))
