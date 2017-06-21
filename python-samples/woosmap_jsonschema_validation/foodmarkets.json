@@ -1,0 +1,367 @@
+{
+  "stores": [
+    {
+      "address": {
+        "city": "Rotterdam",
+        "lines": [
+          "Dominee Jan Scharpstraat 298"
+        ], 
+        "zipcode": "3011 GZ"
+      }, 
+      "storeId": "d3911140d1fbadb82b83e74486af99142623a0dc", 
+      "location": {
+        "lat": 51.919948, 
+        "lng": 4.486843
+      }, 
+      "name": "Markthal Rotterdam", 
+      "contact": {
+        "website": "http://markthalrotterdam.nl/", 
+        "phone": "+31 (0)30 234 64 64", 
+        "email": "info@markthalrotterdam.nl"
+      }
+    }, 
+    {
+      "address": {
+        "city": "Roma", 
+        "lines": [
+          "Via Galvani/Via Alessandro Volta"
+        ], 
+        "zipcode": "00118"
+      }, 
+      "storeId": "6f4c75c5e74336d99ab73bd715ce1ce0a3850970", 
+      "location": {
+        "lat": 41.877657, 
+        "lng": 12.473909
+      }, 
+      "name": "Testaccio Market", 
+      "contact": {
+        "website": "http://www.mercatotestaccio.com/", 
+        "phone": "+39 06 578 0638", 
+        "email": "info@mercatotestaccio.ocm"
+      }
+    }, 
+    {
+      "address": {
+        "city": "Vienna", 
+        "lines": [
+          "Via Galvani/Via Alessandro Volta"
+        ], 
+        "zipcode": "1060"
+      }, 
+      "storeId": "72adb1b1419c16f4d28f90d4ac4394de25f2f555", 
+      "location": {
+        "lat": 48.199044, 
+        "lng": 16.364234
+      }, 
+      "name": "Naschmarkt Vienna", 
+      "contact": {
+        "website": "http://www.naschmarkt-vienna.com/", 
+        "phone": "+43 1 240555", 
+        "email": "contact@naschmarkt-vienna.com"
+      }
+    }, 
+    {
+      "address": {
+        "city": "Madrid", 
+        "lines": [
+          "Plaza de San Miguel"
+        ], 
+        "zipcode": "28005"
+      }, 
+      "storeId": "8af852d45a9059090b5225a96cf424ae0ddcefc5", 
+      "location": {
+        "lat": 40.415261, 
+        "lng": -3.708944
+      }, 
+      "name": "Mercado de San Miguel", 
+      "contact": {
+        "website": "http://www.mercadodesanmiguel.es/en", 
+        "phone": "(+34) 915 42 49 36", 
+        "email": "administracion@mercadodesanmiguel.es"
+      }
+    }, 
+    {
+      "address": {
+        "city": "Barcelona", 
+        "lines": [
+          "La Rambla, 91"
+        ], 
+        "zipcode": "08001"
+      }, 
+      "storeId": "ba3599fcc23989456c146997e68b1a7816fcf5fc", 
+      "location": {
+        "lat": 41.381635, 
+        "lng": 2.171596
+      }, 
+      "name": "Mercado de La Boqueria", 
+      "contact": {
+        "website": "http://www.boqueria.info/", 
+        "phone": "+34 933 18 25 84", 
+        "email": "administracion@mercadodesanmiguel.es"
+      }
+    }, 
+    {
+      "address": {
+        "city": "Nice", 
+        "lines": [
+          "Place Charles F\u00e9lix"
+        ], 
+        "zipcode": "06300"
+      }, 
+      "storeId": "e49e1fcf75bd3b509bf5b5201903ca5270930977", 
+      "location": {
+        "lat": 43.69553, 
+        "lng": 7.275492
+      }, 
+      "name": "Cours Saleya", 
+      "contact": {
+        "website": "http://leblogduvieuxnice.nicematin.com/.services/blog/6a0120a864ed46970b0162fd89fc17970d/search?filter.q=march\u00e9", 
+        "phone": "", 
+        "email": ""
+      }
+    }, 
+    {
+      "address": {
+        "city": "Paris", 
+        "lines": [
+          "Place d\u2019Aligre"
+        ], 
+        "zipcode": "75012"
+      }, 
+      "storeId": "7fe6cfa7b39dbae2eec8fdd7faed315561619cff", 
+      "location": {
+        "lat": 48.849021, 
+        "lng": 2.3777
+      }, 
+      "name": "March\u00e9 d\u2019Aligre", 
+      "contact": {
+        "website": "http://equipement.paris.fr/marche-couvert-beauvau-marche-d-aligre-5480", 
+        "phone": "01 45 11 71 11", 
+        "email": ""
+      }
+    }, 
+    {
+      "address": {
+        "city": "Firenze", 
+        "lines": [
+          "Piazza del Mercato Centrale"
+        ], 
+        "zipcode": "50123"
+      }, 
+      "storeId": "6080ed9f535dcb2e925c334068abe0a4431bb08d", 
+      "location": {
+        "lat": 43.77654, 
+        "lng": 11.253133
+      }, 
+      "name": "Mercato Centrale di San Lorenzo", 
+      "contact": {
+        "website": "http://www.mercatocentrale.it", 
+        "phone": "+39 0552399798", 
+        "email": "info@mercatocentrale.it"
+      }
+    }, 
+    {
+      "address": {
+        "city": "Copenhagen", 
+        "lines": [
+          "Frederiksborggade 21"
+        ], 
+        "zipcode": "1360"
+      }, 
+      "storeId": "56eb5f571b8c083d384658a95a929ea997d69f9f", 
+      "location": {
+        "lat": 55.684025, 
+        "lng": 12.569469
+      }, 
+      "name": "Torvehallerne", 
+      "contact": {
+        "website": "http://torvehallernekbh.dk", 
+        "phone": "+39 0552399798", 
+        "email": "info@torvehallernekbh.dk"
+      }
+    }, 
+    {
+      "address": {
+        "city": "London", 
+        "lines": [
+          "8 Southwark St"
+        ], 
+        "zipcode": "SE1 1TL"
+      }, 
+      "storeId": "74cf59f30119a3672647ef0c4bd9f0587cfcfba4", 
+      "location": {
+        "lat": 51.505046, 
+        "lng": -0.090679
+      }, 
+      "name": "Borough Market", 
+      "contact": {
+        "website": "http://boroughmarket.org.uk", 
+        "phone": "020 7407 1002", 
+        "email": ""
+      }
+    }, 
+    {
+      "address": {
+        "city": "M\u00fcnchen", 
+        "lines": [
+          "Viktualienmarkt 3"
+        ], 
+        "zipcode": "80881"
+      }, 
+      "storeId": "71504c368f415a820795c254d852cadfd711651c", 
+      "location": {
+        "lat": 48.135105, 
+        "lng": 11.576246
+      }, 
+      "name": "Victuals Market", 
+      "contact": {
+        "website": "http://www.muenchen.de/int/en/shopping/markets/viktualienmarkt.html", 
+        "phone": "+49 89 89068205", 
+        "email": ""
+      }
+    }, 
+    {
+      "address": {
+        "city": "S\u00e8te", 
+        "lines": [
+          "Rue Gambetta"
+        ], 
+        "zipcode": "34200"
+      }, 
+      "storeId": "e5bac7b59e5f6a2d4260b412904e09052f6df12c", 
+      "location": {
+        "lat": 43.40214, 
+        "lng": 3.69545
+      }, 
+      "name": "Halles de S\u00e8te", 
+      "contact": {
+        "website": "http://www.halles-sete.com/", 
+        "phone": "04 99 04 70 00", 
+        "email": "commerce-artisanat@ville-sete.fr"
+      }
+    }, 
+    {
+      "address": {
+        "city": "Uz\u00e8s", 
+        "lines": [
+          "Place aux Herbes"
+        ], 
+        "zipcode": "30700"
+      }, 
+      "storeId": "e50bcf462a9fa23cedb6ef2fe57b81472f3477ba", 
+      "location": {
+        "lat": 44.011821, 
+        "lng": 4.418889
+      }, 
+      "name": "March\u00e9 d'Uz\u00e8s", 
+      "contact": {
+        "website": "http://www.uzes.fr/Calendrier-des-marches-brocantes-et-foires_a126.html", 
+        "phone": "+33 (0)4 66 22 68 88", 
+        "email": ""
+      }
+    }, 
+    {
+      "address": {
+        "city": "Apt", 
+        "lines": [
+          "Place de la Bouquerie"
+        ], 
+        "zipcode": "84400"
+      }, 
+      "storeId": "8b685237005769cf1b85a6eb07ccc156b820ec9b", 
+      "location": {
+        "lat": 43.876503, 
+        "lng": 5.393588
+      }, 
+      "name": "Le Grand March\u00e9 d'Apt", 
+      "contact": {
+        "website": "http://www.luberon-apt.fr/index.php/fr/sortir/les-marches", 
+        "phone": "+33 (0)4 90 74 03 18", 
+        "email": "oti@paysapt-luberon.fr"
+      }
+    }, 
+    {
+      "address": {
+        "city": "La Flotte", 
+        "lines": [
+          "Rue du March\u00e9"
+        ], 
+        "zipcode": "17630",
+        "tes":3
+      }, 
+      "storeId": "846c55afb649f6c5715fd0d04700fbac8c369611", 
+      "location": {
+        "lat": 46.187465, 
+        "lng": -1.327086
+      }, 
+      "name": "Le March\u00e9 de la Flotte", 
+      "contact": {
+        "website": "http://laflotte.fr/index.php/Vie-quotidienne/les-marches.html", 
+        "phone": "05.46.09.15.00", 
+        "email": "annie@laflotte.fr"
+      }
+    }, 
+    {
+      "address": {
+        "city": "Edimburgh", 
+        "lines": [
+          "Castle Terrace"
+        ], 
+        "zipcode": "EH1 UK"
+      }, 
+      "storeId": "01d822835de61e34be80dc747fe0e73773aef015", 
+      "location": {
+        "lat": 55.947817, 
+        "lng": -3.203562
+      }, 
+      "name": "Edimburgh Farmers' Market", 
+      "contact": {
+        "website": "http://www.edinburghfarmersmarket.co.uk/", 
+        "phone": "0131 220 8580", 
+        "email": ""
+      }
+    }, 
+    {
+      "address": {
+        "city": "Belfast", 
+        "lines": [
+          "12 - 20 East Bridge Street"
+        ], 
+        "zipcode": "BT1 3NQ"
+      }, 
+      "storeId": "7fc2088804d1700be543f85eb44392134a1e3b4b", 
+      "location": {
+        "lat": 54.596073, 
+        "lng": -5.921654
+      }, 
+      "name": "St George's Market", 
+      "contact": {
+        "website": "http://www.belfastcity.gov.uk/tourism-venues/stgeorgesmarket/stgeorgesmarket-index.aspx", 
+        "phone": "028 9043 5704", 
+        "email": "markets@belfastcity.gov.uk"
+      }
+    }, 
+    {
+      "address": {
+        "city": "Lille", 
+        "lines": [
+          "Place de la nouvelle aventure"
+        ], 
+        "zipcode": "59000"
+      }, 
+      "storeId": "b61c2fca4f713cb9b6136150a9459f5be59a5eed", 
+      "location": {
+        "lat": 50.62671, 
+        "lng": 3.049325
+      }, 
+      "name": "Halles de Wazemmes", 
+      "contact": {
+        "website": "http://www.halles-wazemmes.com/", 
+        "phone": "", 
+        "email": "",
+        "test":2
+      }
+
+    }
+  ]
+}
