@@ -74,7 +74,6 @@ def get_address(asset):
     return {
         'lines': [asset.get('Address Line', '')],
         'city': asset.get('City', ''),
-        'country': asset.get('Country', ''),
         'zipcode': asset.get('Zipcode', '')
     }
 
