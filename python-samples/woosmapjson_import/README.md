@@ -2,7 +2,7 @@
 
 sample usage:
 
-    python upload_foodmarket_data.py
+    python woosmapjson_import.py
 
 This python script may only be used for small data (less than 1000 locations).
 
