@@ -1,4 +1,4 @@
-import csv
+import unicodecsv as csv
 import json
 import os
 import time
@@ -46,7 +46,7 @@ def get_name(asset):
 
 
 def generate_id(asset):
-    asset_id = sha1(get_name(asset)).hexdigest()
+    asset_id = sha1(get_name(asset).encode('utf-8')).hexdigest()
     return asset_id
 
 
@@ -124,7 +124,7 @@ def batch(assets_data, n=1):
 def main():
     start = time.time()
     print('Start parsing and importing your data...')
-    with open(file_path, 'r') as csv_file:
+    with open(file_path, 'rb') as csv_file:
         try:
             reader = csv.DictReader(csv_file, dialect=MyCSVDialect())
             woosmap_assets = []
