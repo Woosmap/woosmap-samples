@@ -28,16 +28,16 @@ class GoogleSheets(object):
     APPLICATION_NAME = 'Google Sheets To Woosmap'
     REDIRECT_URI = 'http://localhost:8080'
 
-    def __init__(self, credentials_path, spreadsheet_id, range_name):
+    def __init__(self, credentials_path, spreadsheet_id, range_name=''):
         self.credentials_path = credentials_path
         self.spreadsheet_id = spreadsheet_id
-        self.range_name = range_name
         self.credentials = self.get_credentials()
         self.http = self.credentials.authorize(httplib2.Http())
         if self.credentials is not None and self.credentials.access_token_expired:
             self.credentials.refresh(self.http)
 
         self.service = self.build_service()
+        self.range_name = range_name if range_name else self.get_first_sheetname()
 
     def build_service(self):
         return discovery.build(self.API_NAME, self.API_VERSION, http=self.http,
@@ -58,6 +58,9 @@ class GoogleSheets(object):
         return self.service.spreadsheets().values().get(spreadsheetId=self.spreadsheet_id,
                                                         range=self.range_name).execute()
 
+    def get_first_sheetname(self):
+        sheet_metadata = self.service.spreadsheets().get(spreadsheetId=self.spreadsheet_id).execute()
+        return sheet_metadata.get('sheets', '')[0].get("properties", {}).get("title", "Sheet1")
 
 class WoosmapAPIHelper:
     """A wrapper around the Woosmap Data API."""
@@ -165,7 +168,7 @@ def batch(assets_data, n=1):
 
 
 def main():
-    google_sheets = GoogleSheets(GOOGLE_CREDENTIALS_PATH, GOOGLE_SPREADSHEET_ID, GOOGLE_RANGE_NAME)
+    google_sheets = GoogleSheets(GOOGLE_CREDENTIALS_PATH, GOOGLE_SPREADSHEET_ID)
 
     sheet_data = google_sheets.get_values().get('values', [])
     header = sheet_data.pop(0)
