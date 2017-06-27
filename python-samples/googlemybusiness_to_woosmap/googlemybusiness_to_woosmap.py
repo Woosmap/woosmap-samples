@@ -293,7 +293,7 @@ def main():
     woosmap_assets = []
     for location in extracted_my_business["locations"]:
         converted_asset = convert_mybusiness_to_woosmap(location)
-        if converted_asset:
+        if bool(converted_asset):
             woosmap_assets.append(converted_asset)
 
     woosmap_api = Woosmap()

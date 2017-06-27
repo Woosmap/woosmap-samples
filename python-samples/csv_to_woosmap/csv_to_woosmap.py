@@ -133,7 +133,7 @@ def main():
             woosmap_assets = []
             for asset in reader:
                 converted_asset = convert_to_woosmap(asset)
-                if converted_asset:
+                if bool(converted_asset):
                     woosmap_assets.append(converted_asset)
 
             print('{0} Assets converted from source file'.format(len(woosmap_assets)))
