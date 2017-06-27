@@ -7,7 +7,6 @@ from hashlib import sha1
 
 YOUR_INPUT_CSV_FILE = 'foodmarkets.csv'
 WOOSMAP_PRIVATE_API_KEY = '23713926-1af5-4321-ba54-032966f6e95d'
-WOOSMAP_API_HOSTNAME = 'api.woosmap.com'
 BATCH_SIZE = 5
 
 
@@ -21,15 +20,19 @@ class MyCSVDialect(csv.Dialect):
 
 
 class WoosmapAPIHelper:
+    """A wrapper around the Woosmap Data API."""
+
+    WOOSMAP_API_HOSTNAME = 'api.woosmap.com'
+
     def __init__(self):
         self.session = requests.Session()
 
     def delete(self):
-        self.session.delete('https://{hostname}/stores/'.format(hostname=WOOSMAP_API_HOSTNAME),
+        self.session.delete('https://{hostname}/stores/'.format(hostname=self.WOOSMAP_API_HOSTNAME),
                             params={'private_key': WOOSMAP_PRIVATE_API_KEY})
 
     def post(self, payload):
-        return self.session.post('https://{hostname}/stores/'.format(hostname=WOOSMAP_API_HOSTNAME),
+        return self.session.post('https://{hostname}/stores/'.format(hostname=self.WOOSMAP_API_HOSTNAME),
                                  params={'private_key': WOOSMAP_PRIVATE_API_KEY},
                                  json={'stores': payload})
 
