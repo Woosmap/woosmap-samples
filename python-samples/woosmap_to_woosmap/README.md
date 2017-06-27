@@ -5,6 +5,6 @@ You could define parameter for **private key** (destination project) if you want
 
 sample usage:
 
-    python geojson_to_woosmap.py
+    python woosmap_to_woosmap.py
 
 The exported data is saved in the file `data.json`
