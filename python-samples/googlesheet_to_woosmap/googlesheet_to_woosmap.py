@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 import httplib2
 import os
 import json
@@ -61,6 +59,7 @@ class GoogleSheets(object):
     def get_first_sheetname(self):
         sheet_metadata = self.service.spreadsheets().get(spreadsheetId=self.spreadsheet_id).execute()
         return sheet_metadata.get('sheets', '')[0].get("properties", {}).get("title", "Sheet1")
+
 
 class WoosmapAPIHelper:
     """A wrapper around the Woosmap Data API."""
