@@ -19,7 +19,7 @@ class MyCSVDialect(csv.Dialect):
     quoting = csv.QUOTE_ALL
 
 
-class WoosmapAPIHelper:
+class Woosmap:
     """A wrapper around the Woosmap Data API."""
 
     WOOSMAP_API_HOSTNAME = 'api.woosmap.com'
@@ -138,7 +138,7 @@ def main():
 
             print('{0} Assets converted from source file'.format(len(woosmap_assets)))
 
-            woosmap_api_helper = WoosmapAPIHelper()
+            woosmap_api_helper = Woosmap()
             # /!\ deleting existing assets before posting new ones /!\
             woosmap_api_helper.delete()
 

@@ -11,7 +11,7 @@ WOOSMAP_PRIVATE_API_KEY = '23713926-1af5-4321-ba54-032966f6e95d'
 BATCH_SIZE = 5
 
 
-class WoosmapAPIHelper:
+class Woosmap:
     """A wrapper around the Woosmap Data API."""
 
     WOOSMAP_API_HOSTNAME = 'api.woosmap.com'
@@ -149,7 +149,7 @@ def main():
 
     print('{0} Assets converted from source file'.format(len(woosmap_assets)))
 
-    woosmap_api_helper = WoosmapAPIHelper()
+    woosmap_api_helper = Woosmap()
     # /!\ deleting existing assets before posting new ones /!\
     woosmap_api_helper.delete()
 
