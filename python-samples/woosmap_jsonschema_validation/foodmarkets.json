@@ -286,9 +286,8 @@
         "lines": [
           "Rue du March\u00e9"
         ], 
-        "zipcode": "17630",
-        "tes":3
-      }, 
+        "zipcode": 17630
+      },
       "storeId": "846c55afb649f6c5715fd0d04700fbac8c369611", 
       "location": {
         "lat": 46.187465, 
@@ -351,7 +350,7 @@
       }, 
       "storeId": "b61c2fca4f713cb9b6136150a9459f5be59a5eed", 
       "location": {
-        "lat": 50.62671, 
+        "lat": 50.62671,
         "lng": 3.049325
       }, 
       "name": "Halles de Wazemmes", 
@@ -359,7 +358,7 @@
         "website": "http://www.halles-wazemmes.com/", 
         "phone": "", 
         "email": "",
-        "test":2
+        "ErrorKey":2
       }
 
     }
