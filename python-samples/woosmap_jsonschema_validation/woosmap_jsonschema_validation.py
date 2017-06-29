@@ -24,7 +24,7 @@ def validate_collection(assets):
         print("Validating Collection of Assets...")
         validate(assets, WOOSMAP_COLLECTION_SCHEMA)
     except ValidationError as error:
-        print Exception("Asset not Matching the Schema: {0} for schema {1}".format(error.message, error.schema))
+        print Exception("Asset not Matching: {0}".format(error.message))
     else:
         print("...Validated Collection Successful!")
 
@@ -38,7 +38,7 @@ def validate_one_by_one(assets):
             validate(item, WOOSMAP_SCHEMA)
         except ValidationError as error:
             print Exception(
-                "Asset not Matching the Schema: {0} for schema {1}".format(error.message, error.schema))
+                "Asset not Matching: {0}".format(error.message))
         else:
             print("...Validated Asset {id} Successful!".format(id=item["storeId"]))
 
