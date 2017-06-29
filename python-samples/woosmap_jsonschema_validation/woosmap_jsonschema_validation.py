@@ -19,7 +19,7 @@ def load_json(file_path):
 
 def validate_collection(assets):
     """ Validate an array of Assets expected as {"stores":[{asset},{asset},...]}
-        really less time consuming but will raise ValidationError at first error """
+        Less time consuming but will raise ValidationError at first error """
     try:
         print("Validating Collection of Assets...")
         validate(assets, WOOSMAP_COLLECTION_SCHEMA)
@@ -31,7 +31,7 @@ def validate_collection(assets):
 
 def validate_one_by_one(assets):
     """ Validate individually each Asset that could be useful to identify
-        all Asset which could be in wrong schema, but it's really slow! """
+        all Asset which could be in wrong schema. A little slower """
     print("Validating assets individually..")
     for item in assets["stores"]:
         try:
