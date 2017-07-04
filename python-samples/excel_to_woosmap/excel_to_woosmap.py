@@ -5,7 +5,7 @@ import time
 import requests
 from hashlib import sha1
 
-INPUT_EXCEL_FILE = 'Food Markets.xlsx'
+INPUT_EXCEL_FILE = 'foodmarkets.xlsx'
 WORKSHEET_NAME = 'foodmarkets'
 WOOSMAP_PRIVATE_API_KEY = '23713926-1af5-4321-ba54-032966f6e95d'
 BATCH_SIZE = 5
