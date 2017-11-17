@@ -2,9 +2,9 @@ import json
 import requests
 import codecs
 
-origin_public_key = ''
+origin_public_key = 'woos-54e9fe79-5c35-3641-ace8-215e5610278d'
 private_key = ''
-output_file = 'data.json'
+output_file = 'woos-54e9fe79-5c35-3641-ace8-215e5610278d.json'
 allowed_referer = 'http://localhost/'
 api_server_host = 'api.woosmap.com'
 geojson_features = []
@@ -59,7 +59,8 @@ def get_all_stores(page=1):
 
 def export_input_json(inputjson):
     with codecs.open(output_file, 'w', encoding='utf8') as outfile:
-        json.dump(inputjson, outfile, indent=2, ensure_ascii=False)
+        woosmap_data = {'stores': inputjson}
+        json.dump(woosmap_data, outfile, indent=2, ensure_ascii=False)
 
 
 def import_location(locations):
