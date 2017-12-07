@@ -1,9 +1,10 @@
 import codecs
-import simplejson as json  # useful to deal with Decimal(x.x) potential errors
 import time
 from hashlib import sha1
-from timezonefinder import TimezoneFinder
+
+import simplejson as json  # useful to deal with Decimal(x.x) potential errors
 from googleplaces import GooglePlaces, GooglePlacesAttributeError, GooglePlacesError
+from timezonefinder import TimezoneFinder
 
 GOOGLE_API_KEY = 'AIzaSyDRcaVMH1F_H3pIbm1T-XXXXXXXXXXX'
 WOOSMAP_OUTPUT_JSON = 'woosmap_output.json'
@@ -77,8 +78,9 @@ def get_regular_hours(places_location):
 
 
 def get_contact(places_location):
+    website = places_location.get('website', '') if places_location.get('website', '') else places_location.get('url')
     return {
-        'website': places_location.get('url'),
+        'website': website,
         'phone': places_location.get('formatted_phone_number')
     }
 
@@ -137,7 +139,6 @@ def main():
                 if bool(converted_asset):
                     print("... {place_name} ...converted to Wosmap OK".format(place_name=place.name.encode('utf-8')))
                     woosmap_converted_asset.append(converted_asset)
-
 
             except (GooglePlacesError, GooglePlacesAttributeError) as error_detail:
                 print('Google Returned an Error : {0} for Place ID : {1}'.format(error_detail, place_id))
