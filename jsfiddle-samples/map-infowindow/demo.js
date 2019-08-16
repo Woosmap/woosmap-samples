@@ -3,13 +3,13 @@ var markersStyle = {
     rules: [
         {
             type: 'drive',
-            icon: {url: 'https://developers.woosmap.com/img/markers/marker_drive.png'},
-            selectedIcon: {url: 'https://developers.woosmap.com/img/markers/marker_selected.png'}
+            icon: {url: 'https://images.woosmap.com/marker_drive.svg', scaledSize: {width: 36, height: 48}},
+            selectedIcon: {url: 'https://images.woosmap.com/marker_drive_selected.svg', scaledSize: {width: 46, height: 60}}
         }
     ],
     default: {
-        icon: {url: 'https://developers.woosmap.com/img/markers/marker_default.png'},
-        selectedIcon: {url: 'https://developers.woosmap.com/img/markers/marker_selected.png'}
+        icon: {url: 'https://images.woosmap.com/marker_default.svg', scaledSize: {width: 36, height: 48}},
+        selectedIcon: {url: 'https://images.woosmap.com/marker_selected.svg', scaledSize: {width: 46, height: 60}}
     }
 };
 var tilesStyle = {

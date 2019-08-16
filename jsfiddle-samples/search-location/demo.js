@@ -3,13 +3,14 @@ var markersStyle = {
     rules: [
         {
             type: 'drive',
-            icon: {url: 'https://developers.woosmap.com/img/markers/marker_drive.png'},
-            selectedIcon: {url: 'https://developers.woosmap.com/img/markers/marker_selected.png'}
+            icon: {url: 'https://images.woosmap.com/marker_drive.svg', scaledSize: {width: 36, height: 48}},
+            selectedIcon: {url: 'https://images.woosmap.com/marker_drive_selected.svg', scaledSize: {width: 46, height: 60}},
+            numberedIcon: {url: 'https://images.woosmap.com/marker_drive_selected.svg', scaledSize: {width: 46, height: 60}}
         }
     ],
     default: {
-        icon: {url: 'https://developers.woosmap.com/img/markers/marker_default.png'},
-        selectedIcon: {url: 'https://developers.woosmap.com/img/markers/marker_selected.png'}
+        icon: {url: 'https://images.woosmap.com/marker_default.svg', scaledSize: {width: 36, height: 48}},
+        selectedIcon: {url: 'https://images.woosmap.com/marker_selected.svg', scaledSize: {width: 46, height: 60}}
     }
 };
 var tilesStyle = {
@@ -37,8 +38,8 @@ function woosmap_main() {
     loader.load(function () {
         var tableview = new woosmap.ui.TableView({
             cell_store: '<div id="item" class="item"><a class="title">' +
-            '{{name}}<br><small class="quiet">{{address.city}}</small></a>' +
-            '<div>{{address.lines}} {{address.city}} {{address.zip}}</div></div>',
+                '{{name}}<br><small class="quiet">{{address.city}}</small></a>' +
+                '<div>{{address.lines}} {{address.city}} {{address.zip}}</div></div>',
             cell_place: '<div id="item" class="item"><a class="title">{{description}}</a></div>'
         });
         var geocoder = new woosmap.location.GeocoderSearchSource();
