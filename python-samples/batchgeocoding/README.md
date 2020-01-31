@@ -1,3 +1,7 @@
+**[UPDATE 31/01/2020]**
+The script has moved to a dedicated repository, [woosmap/geopy-googlemaps-batchgeocoder](https://github.com/woosmap/geopy-googlemaps-batchgeocoder), and updated to be compatible with Python3.  
+---
+
 # Python Script to batch geocode your csv address file using geopy and GoogleV3 Geocoding service
 
 **input** : csv file with addresses you need to geocode
