@@ -9,6 +9,7 @@ from geopy.exc import (
     GeocoderQuotaExceeded,
     ConfigurationError,
     GeocoderParseError,
+    GeocoderTimedOut
 )
 
 # used to set a google geocoding query by merging this value into one string with comma separated
@@ -65,7 +66,7 @@ def process_addresses_from_csv():
             writer = csv.writer(csvoutput, dialect="ga")
 
             # create a proper header with stripped fieldnames for new CSV
-            header = [h.strip() for h in csvinput.next().split(DELIMITER)]
+            header = [h.strip() for h in next(csvinput).split(DELIMITER)]
 
             # read Input CSV as Dict of Dict
             reader = csv.DictReader(csvinput, dialect="ga", fieldnames=header)
@@ -145,7 +146,7 @@ def geocode_address(geo_locator, line_address, component_restrictions=None, retr
         location_result = {"Lat": 0, "Long": 0, "Error": error.message, "formatted_address": "", "location_type": ""}
 
     # To retry because intermittent failures sometimes occurs
-    except (GeocoderQueryError) as error:
+    except (GeocoderQueryError, GeocoderTimedOut) as error:
         if retry_counter < RETRY_COUNTER_CONST:
             return geocode_address(geo_locator, line_address, component_restrictions, retry_counter + 1)
         else:
