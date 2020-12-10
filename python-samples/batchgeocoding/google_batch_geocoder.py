@@ -65,11 +65,7 @@ def process_addresses_from_csv():
             # new csv based on same dialect as input csv
             writer = csv.writer(csvoutput, dialect="ga")
 
-            # create a proper header with stripped fieldnames for new CSV
-            header = [h.strip() for h in next(csvinput).split(DELIMITER)]
-
-            # read Input CSV as Dict of Dict
-            reader = csv.DictReader(csvinput, dialect="ga", fieldnames=header)
+            reader = csv.DictReader(csvinput, dialect="ga")
 
             # 2-dimensional data variable used to write the new CSV
             processed_data = []
