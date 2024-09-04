@@ -10,7 +10,7 @@ This is a simple Java client to interact with the Woosmap Distance API.
 ## Setup
 
 1. Clone the repository.
-2. Replace `YOUR_WOOSMAP_API_KEY` in `WoosmapDistanceApiClient.java` with your actual Woosmap API key.
+2. Replace `YOUR_WOOSMAP_API_KEY` in `WoosmapDistanceApiClient.java` with your actual Woosmap Private API key.
 
 ## Build and Run
 
