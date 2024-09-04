@@ -21,7 +21,23 @@ mvn exec:java -Dexec.mainClass="com.example.WoosmapDistanceApiClient"
 
 ## Example
 
-The client sends a request to the Woosmap Distance API to calculate the distance and duration between Paris and London.
+The client sends a request to the Woosmap Distance API to calculate the distance and duration between Paris and multiple
+destinations. Example of output:
+
+```shell
+[INFO] --- exec:3.0.0:java (default-cli) @ woosmap-distance-api-client ---
+Origin 1:
+  Destination 1:
+    Distance: 24090.0 meters (24.1 km)
+    Duration: 1652.0 seconds (28 mins)
+  Destination 2:
+    Distance: 15880.0 meters (15.9 km)
+    Duration: 1095.0 seconds (18 mins)
+  Destination 3:
+    Distance: 153263.0 meters (153 km)
+    Duration: 7331.0 seconds (2 hours 2 mins)
+[INFO] ------------------------------------------------------------------------
+```
 
 ## Dependencies
 
