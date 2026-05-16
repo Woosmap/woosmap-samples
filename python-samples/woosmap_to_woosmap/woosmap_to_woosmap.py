@@ -32,8 +32,8 @@ def transform_geojson_woosmap(extracted_geojson):
                            "name": prop.get("name", ""),
                            "tags": prop.get("tags", []),
                            "contact": prop.get("contact", {})})
-        except BaseException as error:
-            print('An exception occurred: {}'.format(error))
+        except Exception as err:
+            print('An exception occurred: {}'.format(err))
 
     return stores
 
