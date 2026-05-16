@@ -90,15 +90,14 @@ if __name__ == '__main__':
             export_input_json(stores_woosmap)
         if private_key:
             for store in stores_woosmap:
+                batch.append(store)
                 if len(batch) == stores_batch_size:
                     batch_result = import_location(batch)
                     batch = []
-                else:
-                    batch.append(store)
 
             if batch:
                 batch_result = import_location(batch)
                 batch = []
 
-    except BaseException as error:  # bad bad way!
-        print('An exception occurred: {}'.format(error))
+    except Exception as err:
+        print('An exception occurred: {}'.format(err))
