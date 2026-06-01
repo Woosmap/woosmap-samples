@@ -101,11 +101,10 @@ if __name__ == '__main__':
             try:
                 woosmap_location = datagov2woosmap(location, "ID" + str(id))
 
+                batch.append(woosmap_location)
                 if len(batch) == batch_size:
                     batch_result = import_batch(batch, use_put=update_location)
                     batch = []
-                else:
-                    batch.append(woosmap_location)
 
             except InvalidGeometry:
                 pass
