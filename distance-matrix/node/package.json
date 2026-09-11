@@ -1,0 +1,9 @@
+{
+  "name": "woosmap-distance-matrix-async",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "test": "node --test"
+  }
+}

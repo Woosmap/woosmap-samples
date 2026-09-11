@@ -1,0 +1,755 @@
+{
+  "stores": [
+    {
+      "types": [
+        "covered"
+      ],
+      "location": {
+        "lat": 51.919948,
+        "lng": 4.486843
+      },
+      "storeId": "markthalrotterdam",
+      "name": "Markthal Rotterdam",
+      "address": {
+        "lines": [
+          "Dominee Jan Scharpstraat 298"
+        ],
+        "city": "Rotterdam",
+        "zipcode": "3011 GZ",
+        "countryCode": "NL"
+      },
+      "contact": {
+        "website": "http://markthalrotterdam.nl/",
+        "phone": "+31 (0)30 234 64 64",
+        "email": "info@markthalrotterdam.nl"
+      },
+      "openingHours": {
+        "timezone": "Europe/Amsterdam",
+        "usual": {
+          "default": [
+            {
+              "start": "10:00",
+              "end": "20:00"
+            }
+          ],
+          "1": []
+        }
+      }
+    },
+    {
+      "types": [
+        "covered"
+      ],
+      "location": {
+        "lat": 41.877657,
+        "lng": 12.473909
+      },
+      "storeId": "testacciomarket",
+      "name": "Testaccio Market",
+      "address": {
+        "lines": [
+          "Via Galvani/Via Alessandro Volta"
+        ],
+        "city": "Roma",
+        "zipcode": "00118",
+        "countryCode": "IT"
+      },
+      "contact": {
+        "website": "http://www.mercatotestaccio.com/",
+        "phone": "+39 06 578 0638",
+        "email": "info@mercatotestaccio.ocm"
+      },
+      "openingHours": {
+        "timezone": "Europe/Rome",
+        "usual": {
+          "default": [
+            {
+              "all-day": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "types": [
+        "covered"
+      ],
+      "location": {
+        "lat": 48.199044,
+        "lng": 16.364234
+      },
+      "storeId": "naschmarktvienna",
+      "name": "Naschmarkt Vienna",
+      "address": {
+        "lines": [
+          "Via Galvani/Via Alessandro Volta"
+        ],
+        "city": "Vienna",
+        "zipcode": "1060",
+        "countryCode": "AT"
+      },
+      "contact": {
+        "website": "http://www.naschmarkt-vienna.com/",
+        "tel": "+43 1 240555",
+        "email": "contact@naschmarkt-vienna.com"
+      },
+      "openingHours": {
+        "timezone": "Europe/Vienna",
+        "usual": {
+          "default": [
+            {
+              "start": "6:00",
+              "end": "19:30"
+            }
+          ],
+          "6": [
+            {
+              "start": "6:00",
+              "end": "17:00"
+            }
+          ],
+          "7": []
+        }
+      }
+    },
+    {
+      "types": [
+        "covered"
+      ],
+      "location": {
+        "lat": 40.415261,
+        "lng": -3.708944
+      },
+      "storeId": "mercadodesanmiguel",
+      "name": "Mercado de San Miguel",
+      "address": {
+        "lines": [
+          "Plaza de San Miguel"
+        ],
+        "city": "Madrid",
+        "zipcode": "28005",
+        "countryCode": "ES"
+      },
+      "contact": {
+        "website": "http://www.mercadodesanmiguel.es/en",
+        "phone": "(+34) 915 42 49 36",
+        "email": "administracion@mercadodesanmiguel.es"
+      },
+      "openingHours": {
+        "timezone": "Europe/Madrid",
+        "usual": {
+          "default": [
+            {
+              "start": "10:00",
+              "end": "23:59"
+            }
+          ],
+          "4": [
+            {
+              "start": "10:00",
+              "end": "23:59"
+            }
+          ],
+          "5": [
+            {
+              "start": "10:00",
+              "end": "23:59"
+            }
+          ],
+          "6": [
+            {
+              "start": "10:00",
+              "end": "23:59"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "types": [
+        "covered"
+      ],
+      "location": {
+        "lat": 41.381635,
+        "lng": 2.171596
+      },
+      "storeId": "mercadodelaboqueria",
+      "name": "Mercado de La Boqueria",
+      "address": {
+        "lines": [
+          "La Rambla, 91"
+        ],
+        "city": "Barcelona",
+        "zipcode": "08001",
+        "countryCode": "ES"
+      },
+      "contact": {
+        "website": "http://www.boqueria.info/",
+        "phone": "+34 933 18 25 84",
+        "email": "administracion@mercadodesanmiguel.es"
+      },
+      "openingHours": {
+        "timezone": "Europe/Madrid",
+        "usual": {
+          "default": [
+            {
+              "start": "08:00",
+              "end": "20:30"
+            }
+          ],
+          "7": []
+        }
+      }
+    },
+    {
+      "types": [
+        "covered"
+      ],
+      "location": {
+        "lat": 43.69553,
+        "lng": 7.275492
+      },
+      "storeId": "courssaleya",
+      "name": "Cours Saleya",
+      "address": {
+        "lines": [
+          "Place Charles Félix"
+        ],
+        "city": "Nice",
+        "zipcode": "06300",
+        "countryCode": "FR"
+      },
+      "contact": {
+        "website": "http://leblogduvieuxnice.nicematin.com/.services/blog/6a0120a864ed46970b0162fd89fc17970d/search?filter.q=marché"
+      },
+      "openingHours": {
+        "timezone": "Europe/Paris",
+        "usual": {
+          "default": [
+            {
+              "start": "06:00",
+              "end": "17:30"
+            }
+          ],
+          "1": [],
+          "7": [
+            {
+              "start": "06:00",
+              "end": "13:30"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "types": [
+        "covered"
+      ],
+      "location": {
+        "lat": 48.849021,
+        "lng": 2.3777
+      },
+      "storeId": "marchedaligre",
+      "name": "Marché d’Aligre",
+      "address": {
+        "lines": [
+          "Place d’Aligre"
+        ],
+        "city": "Paris",
+        "zipcode": "75012",
+        "countryCode": "FR"
+      },
+      "contact": {
+        "website": "http://equipement.paris.fr/marche-couvert-beauvau-marche-d-aligre-5480",
+        "phone": "01 45 11 71 11"
+      },
+      "openingHours": {
+        "timezone": "Europe/Paris",
+        "usual": {
+          "default": [
+            {
+              "start": "09:00",
+              "end": "13:00"
+            },
+            {
+              "start": "16:00",
+              "end": "19:30"
+            }
+          ],
+          "6": [
+            {
+              "start": "09:00",
+              "end": "13:00"
+            },
+            {
+              "start": "15:30",
+              "end": "19:30"
+            }
+          ],
+          "7": [
+            {
+              "start": "09:00",
+              "end": "13:00"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "types": [
+        "covered"
+      ],
+      "location": {
+        "lat": 43.77654,
+        "lng": 11.253133
+      },
+      "storeId": "mercatocentraledisanlorenzo",
+      "name": "Mercato Centrale di San Lorenzo",
+      "address": {
+        "lines": [
+          "Piazza del Mercato Centrale",
+          "Via dell'Ariento"
+        ],
+        "city": "Firenze",
+        "zipcode": "50123",
+        "countryCode": "IT"
+      },
+      "contact": {
+        "website": "http://www.mercatocentrale.it",
+        "phone": "+39 0552399798",
+        "email": "info@mercatocentrale.it"
+      },
+      "openingHours": {
+        "timezone": "Europe/Madrid",
+        "usual": {
+          "default": [
+            {
+              "start": "10:00",
+              "end": "23:59"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "types": [
+        "covered"
+      ],
+      "location": {
+        "lat": 55.684025,
+        "lng": 12.569469
+      },
+      "storeId": "torvehallerne",
+      "name": "Torvehallerne",
+      "address": {
+        "lines": [
+          "Frederiksborggade 21"
+        ],
+        "city": "Copenhagen",
+        "zipcode": "1360",
+        "countryCode": "DK"
+      },
+      "contact": {
+        "website": "http://torvehallernekbh.dk",
+        "phone": "+39 0552399798",
+        "email": "info@torvehallernekbh.dk"
+      },
+      "openingHours": {
+        "timezone": "Europe/Copenhagen",
+        "usual": {
+          "default": [
+            {
+              "start": "10:00",
+              "end": "19:00"
+            }
+          ],
+          "5": [
+            {
+              "start": "10:00",
+              "end": "20:00"
+            }
+          ],
+          "6": [
+            {
+              "start": "10:00",
+              "end": "18:00"
+            }
+          ],
+          "7": [
+            {
+              "start": "11:00",
+              "end": "17:00"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "types": [
+        "covered"
+      ],
+      "location": {
+        "lat": 51.505046,
+        "lng": -0.090679
+      },
+      "storeId": "boroughmarket",
+      "name": "Borough Market",
+      "address": {
+        "lines": [
+          "8 Southwark St"
+        ],
+        "city": "London",
+        "zipcode": "SE1 1TL",
+        "countryCode": "GB"
+      },
+      "contact": {
+        "website": "http://boroughmarket.org.uk",
+        "phone": "020 7407 1002"
+      },
+      "openingHours": {
+        "timezone": "Europe/London",
+        "usual": {
+          "default": [
+            {
+              "start": "10:00",
+              "end": "17:00"
+            }
+          ],
+          "5": [
+            {
+              "start": "10:00",
+              "end": "18:00"
+            }
+          ],
+          "7": []
+        }
+      }
+    },
+    {
+      "types": [
+        "covered"
+      ],
+      "location": {
+        "lat": 48.135105,
+        "lng": 11.576246
+      },
+      "storeId": "victualsmarket",
+      "name": "Victuals Market",
+      "address": {
+        "lines": [
+          "Viktualienmarkt 3"
+        ],
+        "city": "München",
+        "zipcode": "80881",
+        "countryCode": "DE"
+      },
+      "contact": {
+        "website": "http://www.muenchen.de/int/en/shopping/markets/viktualienmarkt.html",
+        "phone": "+49 89 89068205"
+      },
+      "openingHours": {
+        "timezone": "Europe/Berlin",
+        "usual": {
+          "default": [
+            {
+              "start": "10:00",
+              "end": "18:00"
+            }
+          ],
+          "6": [
+            {
+              "start": "10:00",
+              "end": "15:00"
+            }
+          ],
+          "7": []
+        }
+      }
+    },
+    {
+      "types": [
+        "covered"
+      ],
+      "location": {
+        "lat": 43.40214,
+        "lng": 3.69545
+      },
+      "storeId": "hallesdesete",
+      "name": "Halles de Sète",
+      "address": {
+        "lines": [
+          "Rue Gambetta"
+        ],
+        "city": "Sète",
+        "zipcode": "34200",
+        "countryCode": "FR"
+      },
+      "contact": {
+        "website": "http://www.halles-sete.com/",
+        "phone": "04 99 04 70 00",
+        "email": "commerce-artisanat@ville-sete.fr"
+      },
+      "openingHours": {
+        "timezone": "Europe/Paris",
+        "usual": {
+          "default": [
+            {
+              "start": "08:00",
+              "end": "13:00"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "types": [
+        "outside"
+      ],
+      "location": {
+        "lat": 44.011821,
+        "lng": 4.418889
+      },
+      "storeId": "marcheduzes",
+      "name": "Marché d'Uzès",
+      "address": {
+        "lines": [
+          "Place aux Herbes"
+        ],
+        "city": "Uzès",
+        "zipcode": "30700",
+        "countryCode": "FR"
+      },
+      "contact": {
+        "website": "http://www.uzes.fr/Calendrier-des-marches-brocantes-et-foires_a126.html",
+        "phone": "+33 (0)4 66 22 68 88"
+      },
+      "openingHours": {
+        "timezone": "Europe/Paris",
+        "usual": {
+          "default": [
+            {
+              "start": "07:30",
+              "end": "13:00"
+            }
+          ],
+          "1": [],
+          "2": [],
+          "4": [],
+          "5": [],
+          "7": []
+        }
+      }
+    },
+    {
+      "types": [
+        "outside"
+      ],
+      "location": {
+        "lat": 43.876503,
+        "lng": 5.393588
+      },
+      "storeId": "marchedapt",
+      "name": "Le Grand Marché d'Apt",
+      "address": {
+        "lines": [
+          "Place de la Bouquerie"
+        ],
+        "city": "Apt",
+        "zipcode": "84400",
+        "countryCode": "FR"
+      },
+      "contact": {
+        "website": "http://www.luberon-apt.fr/index.php/fr/sortir/les-marches",
+        "phone": "+33 (0)4 90 74 03 18",
+        "email": "oti@paysapt-luberon.fr"
+      },
+      "openingHours": {
+        "timezone": "Europe/Paris",
+        "usual": {
+          "default": [
+            {
+              "start": "08:00",
+              "end": "13:00"
+            }
+          ],
+          "1": [],
+          "2": [],
+          "3": [],
+          "4": [],
+          "5": [],
+          "7": []
+        }
+      }
+    },
+    {
+      "types": [
+        "outside"
+      ],
+      "location": {
+        "lat": 46.187465,
+        "lng": -1.327086
+      },
+      "storeId": "marchedelaflotte",
+      "name": "Le Marché de la Flotte",
+      "address": {
+        "lines": [
+          "Rue du Marché"
+        ],
+        "city": "La Flotte",
+        "zipcode": "17630",
+        "countryCode": "FR"
+      },
+      "contact": {
+        "website": "http://laflotte.fr/index.php/Vie-quotidienne/les-marches.html",
+        "phone": "05.46.09.15.00",
+        "email": "annie@laflotte.fr"
+      },
+      "openingHours": {
+        "timezone": "Europe/Paris",
+        "usual": {
+          "default": [
+            {
+              "start": "08:00",
+              "end": "13:00"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "types": [
+        "outside"
+      ],
+      "location": {
+        "lat": 55.947817,
+        "lng": -3.203562
+      },
+      "storeId": "edimburghfarmersmarket",
+      "name": "Edimburgh Farmers' Market",
+      "address": {
+        "lines": [
+          "Castle Terrace"
+        ],
+        "city": "Edimburgh",
+        "zipcode": "EH1 UK",
+        "countryCode": "GB"
+      },
+      "contact": {
+        "website": "http://www.edinburghfarmersmarket.co.uk/",
+        "phone": "0131 220 8580"
+      },
+      "openingHours": {
+        "timezone": "Europe/London",
+        "usual": {
+          "default": [],
+          "6": [
+            {
+              "start": "09:00",
+              "end": "14:00"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "types": [
+        "covered"
+      ],
+      "location": {
+        "lat": 54.596073,
+        "lng": -5.921654
+      },
+      "storeId": "stgeorgesmarket",
+      "name": "St George's Market",
+      "address": {
+        "lines": [
+          "12 - 20 East Bridge Street"
+        ],
+        "city": "Belfast",
+        "zipcode": "BT1 3NQ",
+        "countryCode": "IE"
+      },
+      "contact": {
+        "website": "http://www.belfastcity.gov.uk/tourism-venues/stgeorgesmarket/stgeorgesmarket-index.aspx",
+        "phone": "028 9043 5704",
+        "email": "markets@belfastcity.gov.uk"
+      },
+      "openingHours": {
+        "timezone": "Europe/London",
+        "usual": {
+          "default": [],
+          "5": [
+            {
+              "start": "06:00",
+              "end": "14:00"
+            }
+          ],
+          "6": [
+            {
+              "start": "09:00",
+              "end": "15:00"
+            }
+          ],
+          "7": [
+            {
+              "start": "10:00",
+              "end": "16:00"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "types": [
+        "covered"
+      ],
+      "location": {
+        "lat": 50.62671,
+        "lng": 3.049325
+      },
+      "storeId": "hallesdewazemmes",
+      "name": "Halles de Wazemmes",
+      "address": {
+        "lines": [
+          "Place de la nouvelle aventure"
+        ],
+        "city": "Lille",
+        "zipcode": "59000",
+        "countryCode": "FR"
+      },
+      "contact": {
+        "website": "http://www.halles-wazemmes.com/"
+      },
+      "openingHours": {
+        "timezone": "Europe/Paris",
+        "usual": {
+          "default": [
+            {
+              "start": "08:00",
+              "end": "14:00"
+            }
+          ],
+          "1": [],
+          "5": [
+            {
+              "start": "08:00",
+              "end": "20:00"
+            }
+          ],
+          "6": [
+            {
+              "start": "08:00",
+              "end": "20:00"
+            }
+          ],
+          "7": [
+            {
+              "start": "08:00",
+              "end": "15:00"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

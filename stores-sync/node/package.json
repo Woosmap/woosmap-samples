@@ -1,0 +1,9 @@
+{
+  "name": "woosmap-stores-sync",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "test": "node --test"
+  }
+}

@@ -1,0 +1,187 @@
+// Import stores from a spreadsheet into a Woosmap project. Reading the file is in spreadsheet.mjs.
+import { writeFile } from "node:fs/promises";
+import { pathToFileURL } from "node:url";
+import { parseArgs } from "node:util";
+
+import { readSource } from "./spreadsheet.mjs";
+
+export const API_URL = "https://api.woosmap.com";
+const MAX_BODY_BYTES = 15 * 1024 * 1024; // Stores API request body limit
+
+export const DEFAULT_COLUMNS = {
+  storeId: "Store ID",
+  name: "Name",
+  lat: "Latitude",
+  lng: "Longitude",
+  addressLine: "Address Line",
+  city: "City",
+  zipcode: "Zipcode",
+  countryCode: "Country Code",
+  website: "Website",
+  phone: "Contact Phone",
+  email: "Contact Email",
+  types: "Type",
+  tags: "Tags",
+};
+
+// storeId must match [A-Za-z0-9]+
+const slugify = (value) =>
+  value.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9]+/g, "");
+const parseList = (value) => value.split("|").map((v) => v.trim()).filter(Boolean);
+
+function parseCoordinate(value, name) {
+  const number = Number.parseFloat(String(value).replace(",", "."));
+  if (Number.isNaN(number)) throw new Error(`invalid ${name} '${value}'`);
+  return number;
+}
+
+function compact(object) {
+  const entries = Object.entries(object).filter(([, v]) => v !== "" && v !== undefined && v !== null);
+  return entries.length ? Object.fromEntries(entries) : undefined;
+}
+
+export function rowToAsset(row, columns = DEFAULT_COLUMNS) {
+  const col = (key) => row[columns[key]] ?? "";
+  if (!col("name")) throw new Error("missing name");
+  const storeId = slugify(col("storeId") || col("name"));
+  if (!storeId) throw new Error("no storeId and no name to derive one from");
+  const asset = {
+    storeId,
+    name: col("name"),
+    location: { lat: parseCoordinate(col("lat"), "latitude"), lng: parseCoordinate(col("lng"), "longitude") },
+  };
+  const address = compact({
+    lines: col("addressLine") ? [col("addressLine")] : undefined,
+    city: col("city"),
+    zipcode: col("zipcode"),
+    countryCode: col("countryCode").toUpperCase(),
+  });
+  const contact = compact({ website: col("website"), phone: col("phone"), email: col("email") });
+  if (address) asset.address = address;
+  if (contact) asset.contact = contact;
+  if (col("types")) asset.types = parseList(col("types"));
+  if (col("tags")) asset.tags = parseList(col("tags"));
+  return asset;
+}
+
+export function convertRows(rows, columns = DEFAULT_COLUMNS) {
+  const assets = [];
+  const errors = [];
+  const seen = new Map();
+  let derivedIds = 0;
+  rows.forEach((row, index) => {
+    const line = index + 2;
+    try {
+      const asset = rowToAsset(row, columns);
+      if (seen.has(asset.storeId)) {
+        errors.push(`row ${line}: duplicate storeId '${asset.storeId}' (first seen row ${seen.get(asset.storeId)})`);
+        return;
+      }
+      seen.set(asset.storeId, line);
+      assets.push(asset);
+      if (!row[columns.storeId]) derivedIds += 1;
+    } catch (error) {
+      errors.push(`row ${line}: ${error.message}`);
+    }
+  });
+  return { assets, errors, derivedIds };
+}
+
+const sleep = (seconds) => new Promise((resolve) => setTimeout(resolve, seconds * 1000));
+
+export class WoosmapStores {
+  constructor(privateKey, fetchImpl = fetch, sleepImpl = sleep) {
+    this.privateKey = privateKey;
+    this.fetch = fetchImpl;
+    this.sleep = sleepImpl;
+  }
+
+  async send(method, path, stores) {
+    const body = JSON.stringify({ stores });
+    if (Buffer.byteLength(body) > MAX_BODY_BYTES) throw new Error("request body is above the 15MB limit");
+    let response;
+    for (let attempt = 0; attempt < 3; attempt += 1) {
+      response = await this.fetch(`${API_URL}${path}?private_key=${encodeURIComponent(this.privateKey)}`, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body,
+      });
+      if (response.status !== 429 || attempt === 2) break;
+      // 429 is the only status the API asks to retry, and Retry-After says when
+      await this.sleep(Number(response.headers.get("Retry-After") ?? 2 ** attempt));
+    }
+    if (!response.ok) throw new Error(`${method} ${path} failed (${response.status}): ${await response.text()}`);
+    return response.json();
+  }
+
+  replaceAll = (stores) => this.send("POST", "/stores/replace", stores);
+  // POST rejects the whole batch if one storeId already exists, PUT if one is missing
+  create = (stores) => this.send("POST", "/stores", stores);
+  update = (stores) => this.send("PUT", "/stores", stores);
+}
+
+export function chunked(items, size) {
+  const chunks = [];
+  for (let i = 0; i < items.length; i += size) chunks.push(items.slice(i, i + size));
+  return chunks;
+}
+
+export async function upload(api, assets, mode, batchSize) {
+  if (mode === "replace") {
+    await api.replaceAll(assets);
+    console.log(`replaced the project with ${assets.length} stores`);
+    return;
+  }
+  const action = mode === "create" ? api.create : api.update;
+  for (const batch of chunked(assets, batchSize)) {
+    await action(batch);
+    console.log(`${mode}d ${batch.length} stores`);
+  }
+}
+
+export function parseColumnOverrides(values, base = DEFAULT_COLUMNS) {
+  const columns = { ...base };
+  for (const value of values) {
+    const [key, ...rest] = value.split("=");
+    const header = rest.join("=");
+    if (!(key in columns) || !header) throw new Error(`--column expects FIELD=HEADER with FIELD in ${Object.keys(columns).join(", ")}`);
+    columns[key] = header;
+  }
+  return columns;
+}
+
+export async function main(argv) {
+  const { values, positionals } = parseArgs({
+    args: argv,
+    allowPositionals: true,
+    options: {
+      column: { type: "string", multiple: true, default: [] },
+      mode: { type: "string", default: "replace" },
+      "batch-size": { type: "string", default: "500" },
+      output: { type: "string" },
+      "dry-run": { type: "boolean", default: false },
+      strict: { type: "boolean", default: false },
+    },
+  });
+  const [source] = positionals;
+  if (!source) throw new Error("usage: node import-stores.mjs <csv path | Google Sheets URL> [options]");
+  const rows = await readSource(source);
+  const { assets, errors, derivedIds } = convertRows(rows, parseColumnOverrides(values.column));
+  errors.forEach((error) => console.error(error));
+  console.log(`${assets.length} stores ready, ${errors.length} rows skipped`);
+  if (derivedIds) console.error(`storeId derived from the name for ${derivedIds} stores; add a Store ID column before relying on stores-sync`);
+  if (values.strict && errors.length) return 1;
+  if (values.output) await writeFile(values.output, JSON.stringify({ stores: assets }, null, 2));
+  if (values["dry-run"] || !assets.length) return 0;
+  const privateKey = process.env.WOOSMAP_PRIVATE_KEY;
+  if (!privateKey) throw new Error("set WOOSMAP_PRIVATE_KEY in the environment");
+  await upload(new WoosmapStores(privateKey), assets, values.mode, Number(values["batch-size"]));
+  return 0;
+}
+
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  main(process.argv.slice(2)).then((code) => process.exit(code), (error) => {
+    console.error(error.message);
+    process.exit(1);
+  });
+}
