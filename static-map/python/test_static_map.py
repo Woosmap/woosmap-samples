@@ -52,6 +52,22 @@ def test_fetch_image_raises_on_http_error():
         mod.fetch_image(requests.Session(), "k", [])
 
 
+@responses.activate
+def test_fetch_image_retries_on_429_then_succeeds(monkeypatch):
+    monkeypatch.setattr(mod.time, "sleep", lambda _: None)
+    responses.get(mod.API_URL, status=429, headers={"Retry-After": "0"})
+    responses.get(mod.API_URL, body=b"img", content_type="image/png")
+    assert mod.fetch_image(requests.Session(), "k", []) == b"img"
+
+
+@responses.activate
+def test_fetch_image_does_not_retry_server_errors():
+    responses.get(mod.API_URL, status=503, body="down")
+    with pytest.raises(RuntimeError, match="down"):
+        mod.fetch_image(requests.Session(), "k", [])
+    assert len(responses.calls) == 1
+
+
 def test_public_url_never_contains_the_private_key():
     url = mod.public_url([("lat", "1"), ("lng", "2")])
     assert url.startswith(mod.API_URL)

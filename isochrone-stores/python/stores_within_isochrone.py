@@ -7,6 +7,7 @@ import json
 import math
 import os
 import sys
+import time
 from typing import Any
 
 import requests
@@ -73,9 +74,13 @@ class Woosmap:
         self.session = session or requests.Session()
 
     def get(self, path: str, **params: Any) -> dict[str, Any]:
-        response = self.session.get(
-            f"{API_URL}{path}", params={"private_key": self.private_key, **params}, timeout=60
-        )
+        request_params = {"private_key": self.private_key, **params}
+        for attempt in range(3):
+            response = self.session.get(f"{API_URL}{path}", params=request_params, timeout=60)
+            if response.status_code != 429 or attempt == 2:
+                break
+            # 429 is the only status the API asks to retry, and Retry-After says when
+            time.sleep(float(response.headers.get("Retry-After", 2**attempt)))
         if response.status_code >= 400:
             raise RuntimeError(f"GET {path} failed ({response.status_code}): {response.text}")
         body = response.json()

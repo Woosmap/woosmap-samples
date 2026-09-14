@@ -92,6 +92,22 @@ def test_stores_search_has_no_status_field_and_still_works():
 
 
 @responses.activate
+def test_get_retries_on_429_then_succeeds(monkeypatch):
+    monkeypatch.setattr(mod.time, "sleep", lambda _: None)
+    responses.get(f"{mod.API_URL}/stores/search", status=429, headers={"Retry-After": "0"})
+    responses.get(f"{mod.API_URL}/stores/search", json={"features": [], "pagination": {}})
+    assert mod.Woosmap("k").stores_around((48.8, 2.3), 1000, None) == []
+
+
+@responses.activate
+def test_get_does_not_retry_server_errors():
+    responses.get(f"{mod.API_URL}/stores/search", status=503, body="down")
+    with pytest.raises(RuntimeError, match="down"):
+        mod.Woosmap("k").stores_around((48.8, 2.3), 1000, None)
+    assert len(responses.calls) == 1
+
+
+@responses.activate
 def test_isochrone_decodes_the_isoline_geometry():
     responses.get(
         f"{mod.API_URL}/distance/isochrone/json/",

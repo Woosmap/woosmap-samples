@@ -35,6 +35,22 @@ def test_locate_raises_on_error():
         mod.locate(requests.Session(), "k", "1.2.3.4")
 
 
+@responses.activate
+def test_locate_retries_on_429_then_succeeds(monkeypatch):
+    monkeypatch.setattr(mod.time, "sleep", lambda _: None)
+    responses.get(mod.API_URL, status=429, headers={"Retry-After": "0"})
+    responses.get(mod.API_URL, json=body())
+    assert mod.locate(requests.Session(), "k", "1.2.3.4")["city"] == "Paris"
+
+
+@responses.activate
+def test_locate_does_not_retry_server_errors():
+    responses.get(mod.API_URL, status=503, body="down")
+    with pytest.raises(RuntimeError, match="down"):
+        mod.locate(requests.Session(), "k", "1.2.3.4")
+    assert len(responses.calls) == 1
+
+
 def test_describe_location_includes_city_country_and_accuracy():
     assert mod.describe_location(body()) == "Paris, France (accuracy 5 km)"
 

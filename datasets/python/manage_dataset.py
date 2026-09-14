@@ -25,9 +25,14 @@ class Datasets:
 
     def call(self, method: str, path: str = "", **kwargs: Any) -> dict[str, Any]:
         params = {"private_key": self.private_key, **kwargs.pop("params", {})}
-        response = self.session.request(
-            method, f"{API_URL}{path}", params=params, timeout=60, **kwargs
-        )
+        for attempt in range(3):
+            response = self.session.request(
+                method, f"{API_URL}{path}", params=params, timeout=60, **kwargs
+            )
+            if response.status_code != 429 or attempt == 2:
+                break
+            # 429 is the only status the API asks to retry, and Retry-After says when
+            time.sleep(float(response.headers.get("Retry-After", 2**attempt)))
         if response.status_code >= 400:
             raise RuntimeError(
                 f"{method} {path or '/'} failed ({response.status_code}): {response.text}"
@@ -49,9 +54,15 @@ class Datasets:
 
     def status(self, dataset_id: str) -> dict[str, Any]:
         # 404 "No dataset status available" for a few seconds after the import is triggered
-        response = self.session.get(
-            f"{API_URL}{dataset_id}/status", params={"private_key": self.private_key}, timeout=60
-        )
+        for attempt in range(3):
+            response = self.session.get(
+                f"{API_URL}{dataset_id}/status",
+                params={"private_key": self.private_key},
+                timeout=60,
+            )
+            if response.status_code != 429 or attempt == 2:
+                break
+            time.sleep(float(response.headers.get("Retry-After", 2**attempt)))
         if response.status_code == 404:
             return {"status": "pending", "steps": []}
         if response.status_code >= 400:

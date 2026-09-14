@@ -6,6 +6,7 @@ import argparse
 import json
 import os
 import sys
+import time
 from pathlib import Path
 from typing import Any
 
@@ -45,7 +46,12 @@ def build_params(args: argparse.Namespace) -> list[tuple[str, str]]:
 def fetch_image(
     session: requests.Session, private_key: str, params: list[tuple[str, str]]
 ) -> bytes:
-    response = session.get(API_URL, params=[*params, ("private_key", private_key)], timeout=60)
+    for attempt in range(3):
+        response = session.get(API_URL, params=[*params, ("private_key", private_key)], timeout=60)
+        if response.status_code != 429 or attempt == 2:
+            break
+        # 429 is the only status the API asks to retry, and Retry-After says when
+        time.sleep(float(response.headers.get("Retry-After", 2**attempt)))
     if response.status_code >= 400:
         raise RuntimeError(f"static map failed ({response.status_code}): {response.text}")
     if not response.headers.get("Content-Type", "").startswith("image/"):

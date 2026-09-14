@@ -97,6 +97,31 @@ def test_errors_include_the_api_body():
 
 
 @responses.activate
+def test_call_retries_on_429_then_succeeds(monkeypatch):
+    monkeypatch.setattr(mod.time, "sleep", lambda _: None)
+    responses.get(mod.API_URL, status=429, headers={"Retry-After": "0"})
+    responses.get(mod.API_URL, json={"datasets": [{"id": DATASET}]})
+    assert mod.Datasets("k").list() == [{"id": DATASET}]
+
+
+@responses.activate
+def test_call_does_not_retry_server_errors():
+    responses.get(mod.API_URL, status=503, body="down")
+    with pytest.raises(RuntimeError, match="down"):
+        mod.Datasets("k").list()
+    assert len(responses.calls) == 1
+
+
+@responses.activate
+def test_status_retries_on_429_then_succeeds(monkeypatch):
+    monkeypatch.setattr(mod.time, "sleep", lambda _: None)
+    status_url = f"{mod.API_URL}{DATASET}/status"
+    responses.get(status_url, status=429, headers={"Retry-After": "0"})
+    responses.get(status_url, json={"status": "success", "steps": []})
+    assert mod.Datasets("k").status(DATASET)["status"] == "success"
+
+
+@responses.activate
 def test_main_import_wait_returns_1_on_failure(monkeypatch):
     monkeypatch.setenv("WOOSMAP_PRIVATE_KEY", "k")
     monkeypatch.setattr(mod.time, "sleep", lambda _: None)

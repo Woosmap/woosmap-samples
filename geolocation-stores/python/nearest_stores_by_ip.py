@@ -6,6 +6,7 @@ import argparse
 import json
 import os
 import sys
+import time
 from typing import Any
 
 import requests
@@ -14,15 +15,17 @@ API_URL = "https://api.woosmap.com/geolocation/stores"
 
 
 def locate(session: requests.Session, private_key: str, ip: str, **params: Any) -> dict[str, Any]:
-    response = session.get(
-        API_URL,
-        params={
-            "private_key": private_key,
-            "ip_address": ip,
-            **{k: v for k, v in params.items() if v},
-        },
-        timeout=30,
-    )
+    request_params = {
+        "private_key": private_key,
+        "ip_address": ip,
+        **{k: v for k, v in params.items() if v},
+    }
+    for attempt in range(3):
+        response = session.get(API_URL, params=request_params, timeout=30)
+        if response.status_code != 429 or attempt == 2:
+            break
+        # 429 is the only status the API asks to retry, and Retry-After says when
+        time.sleep(float(response.headers.get("Retry-After", 2**attempt)))
     if response.status_code >= 400:
         raise RuntimeError(f"geolocation failed ({response.status_code}): {response.text}")
     return response.json()
