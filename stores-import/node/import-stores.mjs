@@ -89,6 +89,16 @@ export function convertRows(rows, columns = DEFAULT_COLUMNS) {
 
 const sleep = (seconds) => new Promise((resolve) => setTimeout(resolve, seconds * 1000));
 
+// Woosmap sends ratelimit-reset, in seconds; Retry-After only comes from proxies
+function retryDelay(response, attempt) {
+  for (const header of ["ratelimit-reset", "retry-after"]) {
+    const raw = response.headers.get(header);
+    const value = raw?.trim() ? Number(raw) : Number.NaN;
+    if (Number.isFinite(value) && value >= 0) return value;
+  }
+  return 2 ** attempt;
+}
+
 export class WoosmapStores {
   constructor(privateKey, fetchImpl = fetch, sleepImpl = sleep) {
     this.privateKey = privateKey;
@@ -107,8 +117,7 @@ export class WoosmapStores {
         body,
       });
       if (response.status !== 429 || attempt === 2) break;
-      // 429 is the only status the API asks to retry, and Retry-After says when
-      await this.sleep(Number(response.headers.get("Retry-After") ?? 2 ** attempt));
+      await this.sleep(retryDelay(response, attempt));
     }
     if (!response.ok) throw new Error(`${method} ${path} failed (${response.status}): ${await response.text()}`);
     return response.json();
@@ -120,13 +129,25 @@ export class WoosmapStores {
   update = (stores) => this.send("PUT", "/stores", stores);
 }
 
+export const MODES = ["replace", "create", "update"];
+
+export function positiveInt(value, name) {
+  const number = Number(value);
+  if (!Number.isInteger(number) || number < 1) {
+    throw new Error(`${name} must be a whole number of 1 or more, got '${value}'`);
+  }
+  return number;
+}
+
 export function chunked(items, size) {
+  if (!Number.isInteger(size) || size < 1) throw new Error(`batch size must be 1 or more, got ${size}`);
   const chunks = [];
   for (let i = 0; i < items.length; i += size) chunks.push(items.slice(i, i + size));
   return chunks;
 }
 
 export async function upload(api, assets, mode, batchSize) {
+  if (!MODES.includes(mode)) throw new Error(`--mode must be one of ${MODES.join(", ")}, got '${mode}'`);
   if (mode === "replace") {
     await api.replaceAll(assets);
     console.log(`replaced the project with ${assets.length} stores`);
@@ -165,6 +186,8 @@ export async function main(argv) {
   });
   const [source] = positionals;
   if (!source) throw new Error("usage: node import-stores.mjs <csv path | Google Sheets URL> [options]");
+  if (!MODES.includes(values.mode)) throw new Error(`--mode must be one of ${MODES.join(", ")}, got '${values.mode}'`);
+  const batchSize = positiveInt(values["batch-size"], "--batch-size");
   const rows = await readSource(source);
   const { assets, errors, derivedIds } = convertRows(rows, parseColumnOverrides(values.column));
   errors.forEach((error) => console.error(error));
@@ -175,7 +198,7 @@ export async function main(argv) {
   if (values["dry-run"] || !assets.length) return 0;
   const privateKey = process.env.WOOSMAP_PRIVATE_KEY;
   if (!privateKey) throw new Error("set WOOSMAP_PRIVATE_KEY in the environment");
-  await upload(new WoosmapStores(privateKey), assets, values.mode, Number(values["batch-size"]));
+  await upload(new WoosmapStores(privateKey), assets, values.mode, batchSize);
   return 0;
 }
 

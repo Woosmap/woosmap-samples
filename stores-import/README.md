@@ -58,5 +58,5 @@ Same flags. Reads CSV and Google Sheets, not XLSX.
 
 - Duplicate `storeId` values in the source are reported and only the first row is kept.
 - Requests above the 15MB body limit are refused locally before reaching the API.
-- 429 responses are retried after `Retry-After`; any other error stops with the API message.
+- 429 responses wait for `ratelimit-reset` seconds and retry; any other error stops with the API message.
 - Bad input stops with one line, not a traceback.

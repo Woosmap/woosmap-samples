@@ -1,7 +1,17 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { API_URL, WoosmapStores, applyPlan, buildPlan, deleteQuery, featureToAsset, sameAsset, withoutExpiredClosures } from "./sync-stores.mjs";
+import {
+  API_URL,
+  WoosmapStores,
+  applyPlan,
+  buildPlan,
+  chunked,
+  deleteQuery,
+  featureToAsset,
+  sameAsset,
+  withoutExpiredClosures,
+} from "./sync-stores.mjs";
 
 const feature = (store_id, props = {}, [lat, lng] = [48.5, 2.0]) => ({
   type: "Feature",
@@ -52,6 +62,12 @@ test("plan splits create, update and delete", () => {
   assert.deepEqual(plan.create.map((a) => a.storeId), ["new"]);
   assert.deepEqual(plan.update.map((a) => a.storeId), ["changed"]);
   assert.deepEqual(plan.delete, ["gone"]);
+});
+
+test("chunked refuses a batch size below one instead of hanging", () => {
+  for (const size of [0, -1, Number.NaN]) {
+    assert.throws(() => chunked([1, 2, 3], size), /1 or more/);
+  }
 });
 
 test("delete query uses OR clauses", () => {

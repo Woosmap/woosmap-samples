@@ -5,8 +5,10 @@ import {
   API_URL,
   DEFAULT_COLUMNS,
   WoosmapStores,
+  chunked,
   convertRows,
   parseColumnOverrides,
+  positiveInt,
   rowToAsset,
   upload,
 } from "./import-stores.mjs";
@@ -57,6 +59,40 @@ test("column overrides validate the field name", () => {
   assert.equal(parseColumnOverrides(["name=Shop name"]).name, "Shop name");
   assert.equal(parseColumnOverrides([]).lat, DEFAULT_COLUMNS.lat);
   assert.throws(() => parseColumnOverrides(["colour=Blue"]));
+});
+
+test("an unknown mode is refused instead of falling through to update", async () => {
+  const { fetchImpl, calls } = fakeFetch([{}]);
+  await assert.rejects(
+    upload(new WoosmapStores("k", fetchImpl), [{ storeId: "a" }], "replcae", 500),
+    /--mode must be one of/,
+  );
+  assert.equal(calls.length, 0);
+});
+
+test("chunked refuses a batch size below one instead of hanging", () => {
+  for (const size of [0, -1, Number.NaN]) {
+    assert.throws(() => chunked([1, 2, 3], size), /1 or more/);
+  }
+  assert.deepEqual(chunked([1, 2, 3], 2), [[1, 2], [3]]);
+});
+
+test("positiveInt rejects text, zero and fractions", () => {
+  for (const value of ["abc", "0", "-2", "1.5", ""]) {
+    assert.throws(() => positiveInt(value, "--batch-size"), /1 or more/);
+  }
+  assert.equal(positiveInt("300", "--batch-size"), 300);
+});
+
+test("a date in Retry-After falls back to backoff instead of retrying at once", async () => {
+  const waits = [];
+  const { fetchImpl } = fakeFetch([
+    { status: 429, headers: { "Retry-After": "Wed, 21 Oct 2026 07:28:00 GMT" } },
+    { status: 429, headers: { "ratelimit-reset": "5" } },
+    { status: 200 },
+  ]);
+  await new WoosmapStores("k", fetchImpl, async (s) => waits.push(s)).create([{ storeId: "a" }]);
+  assert.deepEqual(waits, [1, 5]);
 });
 
 test("replace posts every store once with the private key", async () => {

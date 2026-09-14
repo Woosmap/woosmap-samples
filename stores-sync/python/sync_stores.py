@@ -20,6 +20,16 @@ PAGE_SIZE = 300  # stores_by_page maximum
 Asset = dict[str, Any]
 
 
+def retry_delay(response: requests.Response, attempt: int) -> float:
+    # Woosmap sends ratelimit-reset, in seconds; Retry-After only comes from proxies
+    for header in ("ratelimit-reset", "Retry-After"):
+        try:
+            return max(0.0, float(response.headers[header]))
+        except (KeyError, ValueError):
+            continue
+    return float(2**attempt)
+
+
 @dataclass
 class Plan:
     create: list[Asset] = field(default_factory=list)
@@ -43,8 +53,7 @@ class WoosmapStores:
             )
             if response.status_code != 429 or attempt == 2:
                 break
-            # 429 is the only status the API asks to retry, and Retry-After says when
-            time.sleep(float(response.headers.get("Retry-After", 2**attempt)))
+            time.sleep(retry_delay(response, attempt))
         if response.status_code >= 400:
             raise RuntimeError(f"{method} {path} failed ({response.status_code}): {response.text}")
         return response.json()
@@ -157,7 +166,16 @@ def build_plan(local_assets: list[Asset], remote_features: list[dict[str, Any]])
     return plan
 
 
+def positive_int(value: str) -> int:
+    number = int(value)
+    if number < 1:
+        raise argparse.ArgumentTypeError("must be a whole number of 1 or more")
+    return number
+
+
 def chunked(items: list[Any], size: int) -> list[list[Any]]:
+    if size < 1:
+        raise ValueError(f"batch size must be 1 or more, got {size}")
     return [items[i : i + size] for i in range(0, len(items), size)]
 
 
@@ -184,7 +202,7 @@ def describe(plan: Plan) -> str:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("source", type=Path, help='Woosmap JSON file: {"stores": [...]}')
-    parser.add_argument("--batch-size", type=int, default=500)
+    parser.add_argument("--batch-size", type=positive_int, default=500)
     parser.add_argument("--no-delete", action="store_true", help="never delete remote stores")
     parser.add_argument("--dry-run", action="store_true", help="print the plan and stop")
     return parser

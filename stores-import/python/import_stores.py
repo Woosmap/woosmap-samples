@@ -38,6 +38,16 @@ DEFAULT_COLUMNS = {
 Asset = dict[str, Any]
 
 
+def retry_delay(response: requests.Response, attempt: int) -> float:
+    # Woosmap sends ratelimit-reset, in seconds; Retry-After only comes from proxies
+    for header in ("ratelimit-reset", "Retry-After"):
+        try:
+            return max(0.0, float(response.headers[header]))
+        except (KeyError, ValueError):
+            continue
+    return float(2**attempt)
+
+
 @dataclass
 class Conversion:
     assets: list[Asset] = field(default_factory=list)
@@ -152,8 +162,7 @@ class WoosmapStores:
             )
             if response.status_code != 429 or attempt == 2:
                 break
-            # 429 is the only status the API asks to retry, and Retry-After says when
-            time.sleep(float(response.headers.get("Retry-After", 2**attempt)))
+            time.sleep(retry_delay(response, attempt))
         if response.status_code >= 400:
             raise RuntimeError(f"{method} {path} failed ({response.status_code}): {response.text}")
         return response.json()
@@ -169,7 +178,16 @@ class WoosmapStores:
         self.send("PUT", "/stores", stores)
 
 
+def positive_int(value: str) -> int:
+    number = int(value)
+    if number < 1:
+        raise argparse.ArgumentTypeError("must be a whole number of 1 or more")
+    return number
+
+
 def chunked(items: list[Asset], size: int) -> list[list[Asset]]:
+    if size < 1:
+        raise ValueError(f"batch size must be 1 or more, got {size}")
     return [items[i : i + size] for i in range(0, len(items), size)]
 
 
@@ -210,7 +228,10 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--mode", choices=("replace", "create", "update"), default="replace")
     parser.add_argument(
-        "--batch-size", type=int, default=500, help="stores per request in create/update mode"
+        "--batch-size",
+        type=positive_int,
+        default=500,
+        help="stores per request in create/update mode",
     )
     parser.add_argument(
         "--output", type=Path, help="also write the converted stores as Woosmap JSON"

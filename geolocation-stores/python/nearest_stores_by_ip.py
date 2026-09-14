@@ -14,6 +14,16 @@ import requests
 API_URL = "https://api.woosmap.com/geolocation/stores"
 
 
+def retry_delay(response: requests.Response, attempt: int) -> float:
+    # Woosmap sends ratelimit-reset, in seconds; Retry-After only comes from proxies
+    for header in ("ratelimit-reset", "Retry-After"):
+        try:
+            return max(0.0, float(response.headers[header]))
+        except (KeyError, ValueError):
+            continue
+    return float(2**attempt)
+
+
 def locate(session: requests.Session, private_key: str, ip: str, **params: Any) -> dict[str, Any]:
     request_params = {
         "private_key": private_key,
@@ -24,8 +34,7 @@ def locate(session: requests.Session, private_key: str, ip: str, **params: Any) 
         response = session.get(API_URL, params=request_params, timeout=30)
         if response.status_code != 429 or attempt == 2:
             break
-        # 429 is the only status the API asks to retry, and Retry-After says when
-        time.sleep(float(response.headers.get("Retry-After", 2**attempt)))
+        time.sleep(retry_delay(response, attempt))
     if response.status_code >= 400:
         raise RuntimeError(f"geolocation failed ({response.status_code}): {response.text}")
     return response.json()

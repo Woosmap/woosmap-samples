@@ -15,6 +15,16 @@ import requests
 API_URL = "https://api.woosmap.com/maps/static"
 
 
+def retry_delay(response: requests.Response, attempt: int) -> float:
+    # Woosmap sends ratelimit-reset, in seconds; Retry-After only comes from proxies
+    for header in ("ratelimit-reset", "Retry-After"):
+        try:
+            return max(0.0, float(response.headers[header]))
+        except (KeyError, ValueError):
+            continue
+    return float(2**attempt)
+
+
 def parse_marker(text: str) -> dict[str, Any]:
     parts = [part.strip() for part in text.split(",", 2)]
     if len(parts) < 2:
@@ -50,8 +60,7 @@ def fetch_image(
         response = session.get(API_URL, params=[*params, ("private_key", private_key)], timeout=60)
         if response.status_code != 429 or attempt == 2:
             break
-        # 429 is the only status the API asks to retry, and Retry-After says when
-        time.sleep(float(response.headers.get("Retry-After", 2**attempt)))
+        time.sleep(retry_delay(response, attempt))
     if response.status_code >= 400:
         raise RuntimeError(f"static map failed ({response.status_code}): {response.text}")
     if not response.headers.get("Content-Type", "").startswith("image/"):

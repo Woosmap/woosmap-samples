@@ -8,6 +8,16 @@ const PAGE_SIZE = 300; // stores_by_page maximum
 
 const sleep = (seconds) => new Promise((resolve) => setTimeout(resolve, seconds * 1000));
 
+// Woosmap sends ratelimit-reset, in seconds; Retry-After only comes from proxies
+function retryDelay(response, attempt) {
+  for (const header of ["ratelimit-reset", "retry-after"]) {
+    const raw = response.headers.get(header);
+    const value = raw?.trim() ? Number(raw) : Number.NaN;
+    if (Number.isFinite(value) && value >= 0) return value;
+  }
+  return 2 ** attempt;
+}
+
 export class WoosmapStores {
   constructor(privateKey, fetchImpl = fetch, sleepImpl = sleep) {
     this.privateKey = privateKey;
@@ -25,8 +35,7 @@ export class WoosmapStores {
         body: body ? JSON.stringify(body) : undefined,
       });
       if (response.status !== 429 || attempt === 2) break;
-      // 429 is the only status the API asks to retry, and Retry-After says when
-      await this.sleep(Number(response.headers.get("Retry-After") ?? 2 ** attempt));
+      await this.sleep(retryDelay(response, attempt));
     }
     if (!response.ok) throw new Error(`${method} ${path} failed (${response.status}): ${await response.text()}`);
     return response.json();
@@ -115,7 +124,16 @@ export function buildPlan(localAssets, remoteFeatures) {
   return plan;
 }
 
+export function positiveInt(value, name) {
+  const number = Number(value);
+  if (!Number.isInteger(number) || number < 1) {
+    throw new Error(`${name} must be a whole number of 1 or more, got '${value}'`);
+  }
+  return number;
+}
+
 export function chunked(items, size) {
+  if (!Number.isInteger(size) || size < 1) throw new Error(`batch size must be 1 or more, got ${size}`);
   const chunks = [];
   for (let i = 0; i < items.length; i += size) chunks.push(items.slice(i, i + size));
   return chunks;
@@ -168,6 +186,7 @@ export async function main(argv) {
   if (!source) throw new Error("usage: node sync-stores.mjs <woosmap json> [--dry-run] [--no-delete]");
   const privateKey = process.env.WOOSMAP_PRIVATE_KEY;
   if (!privateKey) throw new Error("set WOOSMAP_PRIVATE_KEY in the environment");
+  const batchSize = positiveInt(values["batch-size"], "--batch-size");
   const localAssets = await loadLocalAssets(source);
   const api = new WoosmapStores(privateKey);
   const plan = buildPlan(localAssets, await api.fetchAll());
@@ -175,7 +194,7 @@ export async function main(argv) {
   plan.delete.forEach((id) => console.log(`  delete ${id}`));
   const empty = !plan.create.length && !plan.update.length && !plan.delete.length;
   if (values["dry-run"] || empty) return 0;
-  await applyPlan(api, plan, Number(values["batch-size"]), !values["no-delete"]);
+  await applyPlan(api, plan, batchSize, !values["no-delete"]);
   return 0;
 }
 

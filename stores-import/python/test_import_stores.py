@@ -3,6 +3,7 @@ from pathlib import Path
 
 import import_stores as mod
 import pytest
+import requests
 import responses
 
 DATA = Path(__file__).resolve().parents[2] / "data"
@@ -64,6 +65,35 @@ def test_column_override_parsing():
 def test_unknown_column_override_exits():
     with pytest.raises(SystemExit):
         mod.parse_column_overrides(["colour=Blue"])
+
+
+def test_rate_limit_delay_prefers_the_ratelimit_reset_header():
+    response = requests.Response()
+    response.headers["ratelimit-reset"] = "7"
+    response.headers["Retry-After"] = "99"
+    assert mod.retry_delay(response, 0) == 7.0
+
+
+def test_rate_limit_delay_falls_back_to_retry_after_then_to_backoff():
+    response = requests.Response()
+    response.headers["Retry-After"] = "4"
+    assert mod.retry_delay(response, 0) == 4.0
+    response.headers["Retry-After"] = "Wed, 21 Oct 2026 07:28:00 GMT"
+    assert mod.retry_delay(response, 2) == 4.0
+    del response.headers["Retry-After"]
+    assert mod.retry_delay(response, 3) == 8.0
+
+
+def test_chunked_rejects_a_batch_size_below_one():
+    for size in (0, -1):
+        with pytest.raises(ValueError, match="1 or more"):
+            mod.chunked([{"storeId": "a"}], size)
+
+
+def test_batch_size_option_rejects_zero_and_text():
+    for value in ("0", "-3", "abc"):
+        with pytest.raises(SystemExit):
+            mod.build_parser().parse_args(["x.csv", "--batch-size", value])
 
 
 @responses.activate

@@ -91,6 +91,16 @@ def test_plan_splits_create_update_delete():
     assert plan.delete == ["gone"]
 
 
+def test_chunked_rejects_a_batch_size_below_one():
+    with pytest.raises(ValueError, match="1 or more"):
+        mod.chunked([asset("a")], 0)
+
+
+def test_batch_size_option_rejects_zero():
+    with pytest.raises(SystemExit):
+        mod.build_parser().parse_args(["stores.json", "--batch-size", "0"])
+
+
 def test_delete_query_uses_or_clauses():
     assert mod.delete_query(["a", "b"]) == 'idstore:="a" OR idstore:="b"'
 

@@ -19,6 +19,16 @@ export function parsePoints(text) {
   return points;
 }
 
+// Woosmap sends ratelimit-reset, in seconds; Retry-After only comes from proxies
+function retryDelay(response, attempt) {
+  for (const header of ["ratelimit-reset", "retry-after"]) {
+    const raw = response.headers.get(header);
+    const value = raw?.trim() ? Number(raw) : Number.NaN;
+    if (Number.isFinite(value) && value >= 0) return value;
+  }
+  return 2 ** attempt;
+}
+
 export class AsyncMatrix {
   constructor(privateKey, fetchImpl = fetch, sleepImpl = sleep, now = () => Date.now() / 1000) {
     this.privateKey = privateKey;
@@ -38,8 +48,7 @@ export class AsyncMatrix {
         redirect: "follow",
       });
       if (response.status !== 429 || attempt === 2) break;
-      // 429 is the only status the API asks to retry, and Retry-After says when
-      await this.sleep(Number(response.headers.get("Retry-After") ?? 2 ** attempt));
+      await this.sleep(retryDelay(response, attempt));
     }
     if (!response.ok) throw new Error(`${method} ${url} failed (${response.status}): ${await response.text()}`);
     return response.json();
