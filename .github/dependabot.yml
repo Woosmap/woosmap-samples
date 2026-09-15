@@ -1,0 +1,16 @@
+version: 2
+updates:
+  - package-ecosystem: pip
+    directories:
+      - "/"
+      - "/*/python"
+    schedule:
+      interval: monthly
+  - package-ecosystem: maven
+    directory: "/distance-matrix/java"
+    schedule:
+      interval: monthly
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: monthly
