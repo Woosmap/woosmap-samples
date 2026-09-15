@@ -21,18 +21,22 @@ PAGE_SIZE = 300  # stores_by_page maximum
 Asset = dict[str, Any]
 
 
-def parse_ratelimit(header: str) -> dict[str, int]:
-    # IETF RateLimit header: "policy";r=<remaining>;t=<reset-seconds>; first policy only
-    first_policy = header.split(",", 1)[0]
-    return {key: int(value) for key, value in re.findall(r"\b([rt])=(\d+)", first_policy)}
+def parse_ratelimit(header: str) -> list[dict[str, int]]:
+    # IETF RateLimit header: comma-separated "policy";r=<remaining>;t=<reset-seconds> entries
+    return [
+        {key: int(value) for key, value in re.findall(r"\b([rt])=(\d+)", policy)}
+        for policy in header.split(",")
+        if policy.strip()
+    ]
 
 
 def retry_delay(response: requests.Response, attempt: int) -> float:
-    # RateLimit's t= is current; ratelimit-reset is a compat header pending removal;
-    # Retry-After only ever comes from a proxy
-    reset = parse_ratelimit(response.headers.get("RateLimit", "")).get("t")
-    if reset is not None:
-        return float(reset)
+    # a 429 is bound by whichever policy hit zero, not necessarily the first one in the header;
+    # ratelimit-reset is a compat header pending removal, Retry-After only ever comes from a proxy
+    policies = parse_ratelimit(response.headers.get("RateLimit", ""))
+    exhausted = [policy["t"] for policy in policies if policy.get("r") == 0 and "t" in policy]
+    if exhausted:
+        return float(max(exhausted))
     for header in ("ratelimit-reset", "Retry-After"):
         try:
             return max(0.0, float(response.headers[header]))
@@ -42,9 +46,11 @@ def retry_delay(response: requests.Response, attempt: int) -> float:
 
 
 def rate_limit_remaining(response: requests.Response) -> int | None:
-    remaining = parse_ratelimit(response.headers.get("RateLimit", "")).get("r")
-    if remaining is not None:
-        return remaining
+    # the tightest policy governs: if any one is at zero, so is the batch's real budget
+    policies = parse_ratelimit(response.headers.get("RateLimit", ""))
+    remaining = [policy["r"] for policy in policies if "r" in policy]
+    if remaining:
+        return min(remaining)
     try:
         return int(response.headers["RateLimit-Remaining"])
     except (KeyError, ValueError):

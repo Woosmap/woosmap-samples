@@ -92,6 +92,18 @@ def test_rate_limit_delay_prefers_the_ratelimit_header_over_legacy_ones():
     assert mod.retry_delay(response, 0) == 9.0
 
 
+def test_rate_limit_delay_uses_the_exhausted_policy_even_when_not_first():
+    response = requests.Response()
+    response.headers["RateLimit"] = '"requests";r=5;t=1, "elements";r=0;t=30'
+    assert mod.retry_delay(response, 0) == 30.0
+
+
+def test_rate_limit_remaining_is_the_tightest_policy_even_when_not_first():
+    response = requests.Response()
+    response.headers["RateLimit"] = '"requests";r=5;t=1, "elements";r=0;t=30'
+    assert mod.rate_limit_remaining(response) == 0
+
+
 def test_rate_limit_remaining_reads_ratelimit_then_the_legacy_header():
     response = requests.Response()
     response.headers["RateLimit"] = '"default";r=0;t=9'

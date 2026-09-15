@@ -18,18 +18,22 @@ FINAL_STATUSES = {"completed", "timeout", "error"}
 OUTPUT_COLUMNS = ["origin_index", "destination_index", "status", "distance_m", "duration_s"]
 
 
-def parse_ratelimit(header: str) -> dict[str, int]:
-    # IETF RateLimit header: "policy";r=<remaining>;t=<reset-seconds>; first policy only
-    first_policy = header.split(",", 1)[0]
-    return {key: int(value) for key, value in re.findall(r"\b([rt])=(\d+)", first_policy)}
+def parse_ratelimit(header: str) -> list[dict[str, int]]:
+    # IETF RateLimit header: comma-separated "policy";r=<remaining>;t=<reset-seconds> entries
+    return [
+        {key: int(value) for key, value in re.findall(r"\b([rt])=(\d+)", policy)}
+        for policy in header.split(",")
+        if policy.strip()
+    ]
 
 
 def retry_delay(response: requests.Response, attempt: int) -> float:
-    # RateLimit's t= is current; ratelimit-reset is a compat header pending removal;
-    # Retry-After only ever comes from a proxy
-    reset = parse_ratelimit(response.headers.get("RateLimit", "")).get("t")
-    if reset is not None:
-        return float(reset)
+    # a 429 is bound by whichever policy hit zero, not necessarily the first one in the header;
+    # ratelimit-reset is a compat header pending removal, Retry-After only ever comes from a proxy
+    policies = parse_ratelimit(response.headers.get("RateLimit", ""))
+    exhausted = [policy["t"] for policy in policies if policy.get("r") == 0 and "t" in policy]
+    if exhausted:
+        return float(max(exhausted))
     for header in ("ratelimit-reset", "Retry-After"):
         try:
             return max(0.0, float(response.headers[header]))

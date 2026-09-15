@@ -68,3 +68,13 @@ test("RateLimit's t= wins over the legacy reset header", async () => {
   await new AsyncMatrix("k", fetchImpl, async (s) => waits.push(s)).status("m1");
   assert.deepEqual(waits, [9]);
 });
+
+test("the exhausted policy governs even when it is not first in the header", async () => {
+  const waits = [];
+  const { fetchImpl } = fakeFetch([
+    { status: 429, headers: { RateLimit: '"requests";r=5;t=1, "elements";r=0;t=30' } },
+    { body: { status: "accepted" } },
+  ]);
+  await new AsyncMatrix("k", fetchImpl, async (s) => waits.push(s)).status("m1");
+  assert.deepEqual(waits, [30]);
+});

@@ -89,18 +89,24 @@ export function convertRows(rows, columns = DEFAULT_COLUMNS) {
 
 const sleep = (seconds) => new Promise((resolve) => setTimeout(resolve, seconds * 1000));
 
-// IETF RateLimit header: "policy";r=<remaining>;t=<reset-seconds>; first policy only
+// IETF RateLimit header: comma-separated "policy";r=<remaining>;t=<reset-seconds> entries
 function parseRateLimit(value) {
-  const result = {};
-  for (const match of value.split(",", 1)[0].matchAll(/\b([rt])=(\d+)/g)) result[match[1]] = Number(match[2]);
-  return result;
+  return value
+    .split(",")
+    .filter((policy) => policy.trim())
+    .map((policy) => {
+      const result = {};
+      for (const match of policy.matchAll(/\b([rt])=(\d+)/g)) result[match[1]] = Number(match[2]);
+      return result;
+    });
 }
 
-// RateLimit's t= is current; ratelimit-reset is a compat header pending removal;
-// Retry-After only ever comes from a proxy
+// a 429 is bound by whichever policy hit zero, not necessarily the first one in the header;
+// ratelimit-reset is a compat header pending removal, Retry-After only ever comes from a proxy
 function retryDelay(response, attempt) {
-  const reset = parseRateLimit(response.headers.get("RateLimit") ?? "").t;
-  if (reset !== undefined) return reset;
+  const policies = parseRateLimit(response.headers.get("RateLimit") ?? "");
+  const exhausted = policies.filter((p) => p.r === 0 && p.t !== undefined).map((p) => p.t);
+  if (exhausted.length) return Math.max(...exhausted);
   for (const header of ["ratelimit-reset", "retry-after"]) {
     const raw = response.headers.get(header);
     const value = raw?.trim() ? Number(raw) : Number.NaN;
@@ -110,8 +116,10 @@ function retryDelay(response, attempt) {
 }
 
 function rateLimitRemaining(response) {
-  const remaining = parseRateLimit(response.headers.get("RateLimit") ?? "").r;
-  if (remaining !== undefined) return remaining;
+  // the tightest policy governs: if any one is at zero, so is the batch's real budget
+  const policies = parseRateLimit(response.headers.get("RateLimit") ?? "");
+  const remaining = policies.filter((p) => p.r !== undefined).map((p) => p.r);
+  if (remaining.length) return Math.min(...remaining);
   const legacy = response.headers.get("RateLimit-Remaining");
   return legacy !== null && Number.isFinite(Number(legacy)) ? Number(legacy) : undefined;
 }

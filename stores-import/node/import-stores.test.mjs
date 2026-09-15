@@ -105,6 +105,16 @@ test("RateLimit's t= wins over the legacy reset header", async () => {
   assert.deepEqual(waits, [9]);
 });
 
+test("the exhausted policy governs even when it is not first in the header", async () => {
+  const waits = [];
+  const { fetchImpl } = fakeFetch([
+    { status: 429, headers: { RateLimit: '"requests";r=5;t=1, "elements";r=0;t=30' } },
+    { status: 200 },
+  ]);
+  await new WoosmapStores("k", fetchImpl, async (s) => waits.push(s)).create([{ storeId: "a" }]);
+  assert.deepEqual(waits, [30]);
+});
+
 test("a batch pauses on its own once RateLimit reports no requests left", async () => {
   const waits = [];
   const { fetchImpl, calls } = fakeFetch([
