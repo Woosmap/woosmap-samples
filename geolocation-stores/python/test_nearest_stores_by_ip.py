@@ -71,3 +71,10 @@ def test_main_prints_location_and_stores(capsys, monkeypatch):
     out = capsys.readouterr().out
     assert "Paris, France" in out
     assert "Shop A" in out
+
+
+def test_rate_limit_delay_prefers_the_ratelimit_header_over_legacy_ones():
+    response = requests.Response()
+    response.headers["RateLimit"] = '"default";r=0;t=9'
+    response.headers["ratelimit-reset"] = "2"
+    assert mod.retry_delay(response, 0) == 9.0

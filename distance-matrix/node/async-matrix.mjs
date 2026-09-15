@@ -19,8 +19,18 @@ export function parsePoints(text) {
   return points;
 }
 
-// Woosmap sends ratelimit-reset, in seconds; Retry-After only comes from proxies
+// IETF RateLimit header: "policy";r=<remaining>;t=<reset-seconds>; first policy only
+function parseRateLimit(value) {
+  const result = {};
+  for (const match of value.split(",", 1)[0].matchAll(/\b([rt])=(\d+)/g)) result[match[1]] = Number(match[2]);
+  return result;
+}
+
+// RateLimit's t= is current; ratelimit-reset is a compat header pending removal;
+// Retry-After only ever comes from a proxy
 function retryDelay(response, attempt) {
+  const reset = parseRateLimit(response.headers.get("RateLimit") ?? "").t;
+  if (reset !== undefined) return reset;
   for (const header of ["ratelimit-reset", "retry-after"]) {
     const raw = response.headers.get(header);
     const value = raw?.trim() ? Number(raw) : Number.NaN;

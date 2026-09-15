@@ -38,14 +38,34 @@ DEFAULT_COLUMNS = {
 Asset = dict[str, Any]
 
 
+def parse_ratelimit(header: str) -> dict[str, int]:
+    # IETF RateLimit header: "policy";r=<remaining>;t=<reset-seconds>; first policy only
+    first_policy = header.split(",", 1)[0]
+    return {key: int(value) for key, value in re.findall(r"\b([rt])=(\d+)", first_policy)}
+
+
 def retry_delay(response: requests.Response, attempt: int) -> float:
-    # Woosmap sends ratelimit-reset, in seconds; Retry-After only comes from proxies
+    # RateLimit's t= is current; ratelimit-reset is a compat header pending removal;
+    # Retry-After only ever comes from a proxy
+    reset = parse_ratelimit(response.headers.get("RateLimit", "")).get("t")
+    if reset is not None:
+        return float(reset)
     for header in ("ratelimit-reset", "Retry-After"):
         try:
             return max(0.0, float(response.headers[header]))
         except (KeyError, ValueError):
             continue
     return float(2**attempt)
+
+
+def rate_limit_remaining(response: requests.Response) -> int | None:
+    remaining = parse_ratelimit(response.headers.get("RateLimit", "")).get("r")
+    if remaining is not None:
+        return remaining
+    try:
+        return int(response.headers["RateLimit-Remaining"])
+    except (KeyError, ValueError):
+        return None
 
 
 @dataclass
@@ -165,6 +185,9 @@ class WoosmapStores:
             time.sleep(retry_delay(response, attempt))
         if response.status_code >= 400:
             raise RuntimeError(f"{method} {path} failed ({response.status_code}): {response.text}")
+        if rate_limit_remaining(response) == 0:
+            # the quota is gone for this window; wait it out now instead of 429ing the next batch
+            time.sleep(retry_delay(response, 0))
         return response.json()
 
     def replace_all(self, stores: list[Asset]) -> None:

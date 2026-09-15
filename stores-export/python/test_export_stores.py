@@ -63,3 +63,10 @@ def test_main_writes_geojson_file(tmp_path, monkeypatch):
     document = json.loads(output.read_text())
     assert document["type"] == "FeatureCollection"
     assert document["features"][0]["properties"]["store_id"] == "a"
+
+
+def test_rate_limit_delay_prefers_the_ratelimit_header_over_legacy_ones():
+    response = requests.Response()
+    response.headers["RateLimit"] = '"default";r=0;t=9'
+    response.headers["ratelimit-reset"] = "2"
+    assert mod.retry_delay(response, 0) == 9.0

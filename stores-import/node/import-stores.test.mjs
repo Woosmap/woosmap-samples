@@ -95,6 +95,29 @@ test("a date in Retry-After falls back to backoff instead of retrying at once", 
   assert.deepEqual(waits, [1, 5]);
 });
 
+test("RateLimit's t= wins over the legacy reset header", async () => {
+  const waits = [];
+  const { fetchImpl } = fakeFetch([
+    { status: 429, headers: { RateLimit: '"default";r=0;t=9', "ratelimit-reset": "2" } },
+    { status: 200 },
+  ]);
+  await new WoosmapStores("k", fetchImpl, async (s) => waits.push(s)).create([{ storeId: "a" }]);
+  assert.deepEqual(waits, [9]);
+});
+
+test("a batch pauses on its own once RateLimit reports no requests left", async () => {
+  const waits = [];
+  const { fetchImpl, calls } = fakeFetch([
+    { status: 200, headers: { RateLimit: '"default";r=0;t=4' } },
+    { status: 200 },
+  ]);
+  const api = new WoosmapStores("k", fetchImpl, async (s) => waits.push(s));
+  await api.create([{ storeId: "a" }]);
+  await api.create([{ storeId: "b" }]);
+  assert.equal(calls.length, 2);
+  assert.deepEqual(waits, [4]);
+});
+
 test("replace posts every store once with the private key", async () => {
   const { fetchImpl, calls } = fakeFetch([{ status: 200, body: '{"status":"OK"}' }]);
   await upload(new WoosmapStores("secret", fetchImpl), [{ storeId: "a" }, { storeId: "b" }], "replace", 1);

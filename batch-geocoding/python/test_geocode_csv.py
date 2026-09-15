@@ -2,6 +2,7 @@ import csv
 from pathlib import Path
 
 import geocode_csv as mod
+import requests
 import responses
 
 DATA = Path(__file__).resolve().parents[2] / "data"
@@ -128,3 +129,10 @@ def test_main_writes_input_columns_plus_geocode_columns(tmp_path, monkeypatch):
     assert rows[0]["id"] == "markthalrotterdam"
     assert rows[0]["geocode_lat"] == "48.8"
     assert responses.calls[0].request.params["latlng"] == "51.919948,4.486843"
+
+
+def test_rate_limit_delay_prefers_the_ratelimit_header_over_legacy_ones():
+    response = requests.Response()
+    response.headers["RateLimit"] = '"default";r=0;t=9'
+    response.headers["ratelimit-reset"] = "2"
+    assert mod.retry_delay(response, 0) == 9.0

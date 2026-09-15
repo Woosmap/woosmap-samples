@@ -2,6 +2,7 @@ import csv
 
 import async_matrix as mod
 import pytest
+import requests
 import responses
 
 
@@ -153,3 +154,10 @@ def test_main_requires_inputs_or_matrix_id(tmp_path, monkeypatch):
     monkeypatch.setenv("WOOSMAP_PRIVATE_KEY", "k")
     with pytest.raises(SystemExit):
         mod.main([str(tmp_path / "out.csv")])
+
+
+def test_rate_limit_delay_prefers_the_ratelimit_header_over_legacy_ones():
+    response = requests.Response()
+    response.headers["RateLimit"] = '"default";r=0;t=9'
+    response.headers["ratelimit-reset"] = "2"
+    assert mod.retry_delay(response, 0) == 9.0

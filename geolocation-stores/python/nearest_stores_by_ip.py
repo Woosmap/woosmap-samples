@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import sys
 import time
 from typing import Any
@@ -14,8 +15,18 @@ import requests
 API_URL = "https://api.woosmap.com/geolocation/stores"
 
 
+def parse_ratelimit(header: str) -> dict[str, int]:
+    # IETF RateLimit header: "policy";r=<remaining>;t=<reset-seconds>; first policy only
+    first_policy = header.split(",", 1)[0]
+    return {key: int(value) for key, value in re.findall(r"\b([rt])=(\d+)", first_policy)}
+
+
 def retry_delay(response: requests.Response, attempt: int) -> float:
-    # Woosmap sends ratelimit-reset, in seconds; Retry-After only comes from proxies
+    # RateLimit's t= is current; ratelimit-reset is a compat header pending removal;
+    # Retry-After only ever comes from a proxy
+    reset = parse_ratelimit(response.headers.get("RateLimit", "")).get("t")
+    if reset is not None:
+        return float(reset)
     for header in ("ratelimit-reset", "Retry-After"):
         try:
             return max(0.0, float(response.headers[header]))

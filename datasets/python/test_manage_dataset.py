@@ -2,6 +2,7 @@ import json
 
 import manage_dataset as mod
 import pytest
+import requests
 import responses
 
 DATASET = "11111111-2222-3333-4444-555555555555"
@@ -136,3 +137,10 @@ def test_main_list_prints_json(capsys, monkeypatch):
     responses.get(mod.API_URL, json={"datasets": [{"id": DATASET}], "pagination": {"page": 1}})
     assert mod.main(["list"]) == 0
     assert DATASET in capsys.readouterr().out
+
+
+def test_rate_limit_delay_prefers_the_ratelimit_header_over_legacy_ones():
+    response = requests.Response()
+    response.headers["RateLimit"] = '"default";r=0;t=9'
+    response.headers["ratelimit-reset"] = "2"
+    assert mod.retry_delay(response, 0) == 9.0

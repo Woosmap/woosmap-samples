@@ -58,3 +58,13 @@ test("errors fail immediately and carry the body", async () => {
   await assert.rejects(new AsyncMatrix("k", fetchImpl, async () => {}).status("m1"), /gateway/);
   assert.equal(calls.length, 1);
 });
+
+test("RateLimit's t= wins over the legacy reset header", async () => {
+  const waits = [];
+  const { fetchImpl } = fakeFetch([
+    { status: 429, headers: { RateLimit: '"default";r=0;t=9', "ratelimit-reset": "2" } },
+    { body: { status: "accepted" } },
+  ]);
+  await new AsyncMatrix("k", fetchImpl, async (s) => waits.push(s)).status("m1");
+  assert.deepEqual(waits, [9]);
+});

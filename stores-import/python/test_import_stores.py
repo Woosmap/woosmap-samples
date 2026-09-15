@@ -84,6 +84,40 @@ def test_rate_limit_delay_falls_back_to_retry_after_then_to_backoff():
     assert mod.retry_delay(response, 3) == 8.0
 
 
+def test_rate_limit_delay_prefers_the_ratelimit_header_over_legacy_ones():
+    response = requests.Response()
+    response.headers["RateLimit"] = '"default";r=0;t=9'
+    response.headers["ratelimit-reset"] = "2"
+    response.headers["Retry-After"] = "1"
+    assert mod.retry_delay(response, 0) == 9.0
+
+
+def test_rate_limit_remaining_reads_ratelimit_then_the_legacy_header():
+    response = requests.Response()
+    response.headers["RateLimit"] = '"default";r=0;t=9'
+    assert mod.rate_limit_remaining(response) == 0
+    del response.headers["RateLimit"]
+    response.headers["RateLimit-Remaining"] = "3"
+    assert mod.rate_limit_remaining(response) == 3
+    del response.headers["RateLimit-Remaining"]
+    assert mod.rate_limit_remaining(response) is None
+
+
+@responses.activate
+def test_a_batch_pauses_on_its_own_once_the_quota_is_gone(monkeypatch):
+    waits = []
+    monkeypatch.setattr(mod.time, "sleep", waits.append)
+    responses.post(
+        f"{mod.API_URL}/stores", json={"status": "OK"}, headers={"RateLimit": '"default";r=0;t=4'}
+    )
+    responses.post(f"{mod.API_URL}/stores", json={"status": "OK"})
+    api = mod.WoosmapStores("k")
+    api.create([{"storeId": "a"}])
+    api.create([{"storeId": "b"}])
+    assert waits == [4.0]
+    assert len(responses.calls) == 2
+
+
 def test_chunked_rejects_a_batch_size_below_one():
     for size in (0, -1):
         with pytest.raises(ValueError, match="1 or more"):

@@ -3,6 +3,7 @@ from datetime import date
 from pathlib import Path
 
 import pytest
+import requests
 import responses
 import sync_stores as mod
 
@@ -142,6 +143,34 @@ def test_api_errors_surface_with_body():
     responses.post(f"{mod.API_URL}/stores", status=400, body='{"detail":"nope"}')
     with pytest.raises(RuntimeError, match="nope"):
         mod.WoosmapStores("k").create([asset("x")])
+
+
+def test_rate_limit_delay_prefers_the_ratelimit_header_over_legacy_ones():
+    response = requests.Response()
+    response.headers["RateLimit"] = '"default";r=0;t=9'
+    response.headers["ratelimit-reset"] = "2"
+    assert mod.retry_delay(response, 0) == 9.0
+
+
+def test_rate_limit_remaining_reads_ratelimit_then_the_legacy_header():
+    response = requests.Response()
+    response.headers["RateLimit"] = '"default";r=0;t=9'
+    assert mod.rate_limit_remaining(response) == 0
+    del response.headers["RateLimit"]
+    assert mod.rate_limit_remaining(response) is None
+
+
+@responses.activate
+def test_a_batch_pauses_on_its_own_once_the_quota_is_gone(monkeypatch):
+    waits = []
+    monkeypatch.setattr(mod.time, "sleep", waits.append)
+    responses.post(f"{mod.API_URL}/stores", json={}, headers={"RateLimit": '"default";r=0;t=4'})
+    responses.post(f"{mod.API_URL}/stores", json={})
+    api = mod.WoosmapStores("k")
+    api.create([asset("a")])
+    api.create([asset("b")])
+    assert waits == [4.0]
+    assert len(responses.calls) == 2
 
 
 @responses.activate

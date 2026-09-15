@@ -60,6 +60,13 @@ def test_fetch_image_retries_on_429_then_succeeds(monkeypatch):
     assert mod.fetch_image(requests.Session(), "k", []) == b"img"
 
 
+def test_rate_limit_delay_prefers_the_ratelimit_header_over_legacy_ones():
+    response = requests.Response()
+    response.headers["RateLimit"] = '"default";r=0;t=9'
+    response.headers["ratelimit-reset"] = "2"
+    assert mod.retry_delay(response, 0) == 9.0
+
+
 @responses.activate
 def test_fetch_image_does_not_retry_server_errors():
     responses.get(mod.API_URL, status=503, body="down")

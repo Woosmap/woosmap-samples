@@ -43,8 +43,8 @@ Test data lives in [data/](data/). The food markets set is small enough to impor
 
 - Python 3.10+, type hints everywhere, `requests` as the only HTTP dependency.
 - Node 20+, ES modules, the built-in `fetch`, no dependency.
-- One retry policy: 429 waits for `ratelimit-reset`, the header the API actually sends, then retries.
-  Anything else fails with the response body.
+- One retry policy: 429 waits for the reset time in the `RateLimit` header (falling back to the
+  legacy `ratelimit-reset`), then retries. Anything else fails with the response body.
 - Write operations use `/stores/replace` or explicit create, update and delete, never delete-then-post.
 - Each sample ships its tests. `pytest` and `node --test` run offline against mocked responses.
 - Where a sample needs plumbing that is not about Woosmap, it sits in its own module next to the main one.

@@ -89,14 +89,31 @@ export function convertRows(rows, columns = DEFAULT_COLUMNS) {
 
 const sleep = (seconds) => new Promise((resolve) => setTimeout(resolve, seconds * 1000));
 
-// Woosmap sends ratelimit-reset, in seconds; Retry-After only comes from proxies
+// IETF RateLimit header: "policy";r=<remaining>;t=<reset-seconds>; first policy only
+function parseRateLimit(value) {
+  const result = {};
+  for (const match of value.split(",", 1)[0].matchAll(/\b([rt])=(\d+)/g)) result[match[1]] = Number(match[2]);
+  return result;
+}
+
+// RateLimit's t= is current; ratelimit-reset is a compat header pending removal;
+// Retry-After only ever comes from a proxy
 function retryDelay(response, attempt) {
+  const reset = parseRateLimit(response.headers.get("RateLimit") ?? "").t;
+  if (reset !== undefined) return reset;
   for (const header of ["ratelimit-reset", "retry-after"]) {
     const raw = response.headers.get(header);
     const value = raw?.trim() ? Number(raw) : Number.NaN;
     if (Number.isFinite(value) && value >= 0) return value;
   }
   return 2 ** attempt;
+}
+
+function rateLimitRemaining(response) {
+  const remaining = parseRateLimit(response.headers.get("RateLimit") ?? "").r;
+  if (remaining !== undefined) return remaining;
+  const legacy = response.headers.get("RateLimit-Remaining");
+  return legacy !== null && Number.isFinite(Number(legacy)) ? Number(legacy) : undefined;
 }
 
 export class WoosmapStores {
@@ -120,6 +137,8 @@ export class WoosmapStores {
       await this.sleep(retryDelay(response, attempt));
     }
     if (!response.ok) throw new Error(`${method} ${path} failed (${response.status}): ${await response.text()}`);
+    // the quota is gone for this window; wait it out now instead of 429ing the next batch
+    if (rateLimitRemaining(response) === 0) await this.sleep(retryDelay(response, 0));
     return response.json();
   }
 

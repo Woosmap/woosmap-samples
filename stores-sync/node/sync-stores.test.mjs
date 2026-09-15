@@ -115,3 +115,26 @@ test("429 is retried after Retry-After", async () => {
   assert.equal(calls.length, 2);
   assert.deepEqual(waits, [3]);
 });
+
+test("RateLimit's t= wins over the legacy reset header", async () => {
+  const waits = [];
+  const { fetchImpl } = fakeFetch([
+    { status: 429, headers: { RateLimit: '"default";r=0;t=9', "ratelimit-reset": "2" } },
+    { body: {} },
+  ]);
+  await new WoosmapStores("k", fetchImpl, async (s) => waits.push(s)).create([asset("x")]);
+  assert.deepEqual(waits, [9]);
+});
+
+test("a batch pauses on its own once RateLimit reports no requests left", async () => {
+  const waits = [];
+  const { fetchImpl, calls } = fakeFetch([
+    { body: {}, headers: { RateLimit: '"default";r=0;t=4' } },
+    { body: {} },
+  ]);
+  const api = new WoosmapStores("k", fetchImpl, async (s) => waits.push(s));
+  await api.create([asset("a")]);
+  await api.create([asset("b")]);
+  assert.equal(calls.length, 2);
+  assert.deepEqual(waits, [4]);
+});
