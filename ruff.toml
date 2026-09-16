@@ -1,0 +1,12 @@
+line-length = 100
+target-version = "py310"
+
+[lint]
+select = ["E", "F", "I", "B", "UP", "ANN", "C90"]
+ignore = ["ANN401"]
+
+[lint.mccabe]
+max-complexity = 10
+
+[lint.per-file-ignores]
+"test_*.py" = ["ANN"]

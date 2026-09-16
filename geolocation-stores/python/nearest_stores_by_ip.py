@@ -1,0 +1,109 @@
+"""Find the stores closest to a visitor from their IP address, server-side."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import re
+import sys
+import time
+from typing import Any
+
+import requests
+
+API_URL = "https://api.woosmap.com/geolocation/stores"
+
+
+def parse_ratelimit(header: str) -> list[dict[str, int]]:
+    # IETF RateLimit header: comma-separated "policy";r=<remaining>;t=<reset-seconds> entries
+    return [
+        {key: int(value) for key, value in re.findall(r"\b([rt])=(\d+)", policy)}
+        for policy in header.split(",")
+        if policy.strip()
+    ]
+
+
+def retry_delay(response: requests.Response, attempt: int) -> float:
+    # a 429 is bound by whichever policy hit zero, not necessarily the first one in the header;
+    # ratelimit-reset is a compat header pending removal, Retry-After only ever comes from a proxy
+    policies = parse_ratelimit(response.headers.get("RateLimit", ""))
+    exhausted = [policy["t"] for policy in policies if policy.get("r") == 0 and "t" in policy]
+    if exhausted:
+        return float(max(exhausted))
+    for header in ("ratelimit-reset", "Retry-After"):
+        try:
+            return max(0.0, float(response.headers[header]))
+        except (KeyError, ValueError):
+            continue
+    return float(2**attempt)
+
+
+def locate(session: requests.Session, private_key: str, ip: str, **params: Any) -> dict[str, Any]:
+    request_params = {
+        "private_key": private_key,
+        "ip_address": ip,
+        **{k: v for k, v in params.items() if v},
+    }
+    for attempt in range(3):
+        response = session.get(API_URL, params=request_params, timeout=30)
+        if response.status_code != 429 or attempt == 2:
+            break
+        time.sleep(retry_delay(response, attempt))
+    if response.status_code >= 400:
+        raise RuntimeError(f"geolocation failed ({response.status_code}): {response.text}")
+    return response.json()
+
+
+def describe_location(body: dict[str, Any]) -> str:
+    place = ", ".join(part for part in (body.get("city"), body.get("country_name")) if part)
+    accuracy = body.get("accuracy")
+    return f"{place or 'unknown location'} (accuracy {accuracy} km)" if accuracy else place
+
+
+def store_lines(body: dict[str, Any]) -> list[str]:
+    features = (body.get("stores") or {}).get("features") or []
+    return [
+        f"{f['properties'].get('store_id')}\t{f['properties'].get('name')}\t{f['properties'].get('distance')}"
+        for f in features
+    ]
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("ip", help="public IPv4 or IPv6 address of the visitor")
+    parser.add_argument("--limit", type=int, default=3, help="number of stores to return")
+    parser.add_argument("--radius", type=int, help="search radius in metres")
+    parser.add_argument("--query", help='optional Stores API query, e.g. type:"grocery"')
+    parser.add_argument("--json", action="store_true", help="print the raw response")
+    return parser
+
+
+def private_key_from_env() -> str:
+    key = os.environ.get("WOOSMAP_PRIVATE_KEY")
+    if not key:
+        raise SystemExit("set WOOSMAP_PRIVATE_KEY in the environment")
+    return key
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = build_parser().parse_args(argv)
+    body = locate(
+        requests.Session(),
+        private_key_from_env(),
+        args.ip,
+        limit=args.limit,
+        radius=args.radius,
+        query=args.query,
+    )
+    if args.json:
+        print(json.dumps(body, indent=2))
+        return 0
+    print(describe_location(body))
+    lines = store_lines(body)
+    print("\n".join(lines) if lines else "no store found near this IP")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

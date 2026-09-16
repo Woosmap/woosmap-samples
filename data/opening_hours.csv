@@ -1,0 +1,6 @@
+store_id,timezone,monday,tuesday,wednesday,thursday,friday,saturday,sunday
+markthalrotterdam,Europe/Amsterdam,closed,10:00-20:00,10:00-20:00,10:00-20:00,10:00-20:00,10:00-20:00,10:00-20:00
+testacciomarket,Europe/Rome,07:00-15:30,07:00-15:30,07:00-15:30,07:00-15:30,07:00-15:30,07:00-15:30,closed
+nightmarket,Europe/London,,,,18:00-02:00,18:00-02:00,18:00-02:00,
+allhours,Europe/Paris,24/7,24/7,24/7,24/7,24/7,24/7,24/7
+bistro,Europe/Paris,"11:30-14:00, 18:00-23:00","11:30-14:00, 18:00-23:00","11:30-14:00, 18:00-23:00","11:30-14:00, 18:00-23:00","11:30-14:00, 18:00-23:59",18:00-23:59,closed
